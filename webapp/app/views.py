@@ -1,0 +1,107 @@
+# from itertools import product
+from django.contrib import messages
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import *
+from django.http import JsonResponse
+
+# app
+from .python.app.base import *
+from .python.app.follow import *
+
+from .python.app.category import category
+from .python.app.detail import detail, detail_chapter
+from .python.app.information import Information, edit_information
+from .python.app.login import loginPage, logoutPage
+from .python.app.register import register
+from .python.app.search import searchProduct
+from .python.app.updateItem import updateItem
+from .python.app.contact import contact
+
+
+# admin
+from .python.admin.manage import Manage
+from .python.admin.home_manage import homeManage
+from .python.admin.manage_slide import manageSlide, addSlide, editSlide, deleteSlide, get_slide
+from .python.admin.updateStatus import update_status
+from .python.admin.manage_user import manageUser, deleteUser, addUser, editUser
+
+from .python.admin.manage_category import manageCategory, addCategory, editCategory, deleteCategory
+from .python.admin.manage_story import manageStory, addStory, editStory, deleteStory, viewStory, addChapter
+from django.views.decorators.csrf import csrf_exempt
+
+import hashlib
+import hmac
+import json
+import urllib
+import urllib.parse
+import urllib.request
+import random
+import requests
+from datetime import datetime
+from django.conf import settings
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import render, redirect
+# from django.utils.http import urlquote
+
+
+
+from django.urls import reverse
+from django.shortcuts import render
+
+
+@csrf_exempt
+def update_view_history(request, story_id, chapter_id):
+    if request.user.is_authenticated:
+        # Lấy lịch sử từ cookie
+        view_history = request.COOKIES.get('view_history', '[]')
+        view_history = json.loads(view_history)
+
+        # Kiểm tra xem story_id đã được đọc chưa
+        if story_id not in view_history:
+            view_history.append(story_id)
+
+        # Giới hạn lịch sử đọc truyện tối đa là 10 mục (hoặc bất kỳ giới hạn nào bạn muốn)
+        view_history = view_history[-10:]
+
+        # Cập nhật cookie với lịch sử mới
+        response = JsonResponse({'status': 'success'})
+        response.set_cookie('view_history', json.dumps(view_history))
+        test = ViewHistory.objects.filter(story_id=story_id)
+        if test.exists():
+            test.delete()
+
+        # Cập nhật lịch sử trong cơ sở dữ liệu
+        ViewHistory.objects.create(user=request.user, story_id=story_id, chapter_id=chapter_id, is_reading=True)
+        return response
+
+    return JsonResponse({'status': 'error'})
+
+def view_history(request):
+    user_not_login = "none" if request.user.is_authenticated else "show"
+    user_login = "show" if request.user.is_authenticated else "none"
+    story_chapter_list = []
+    context = {}
+    if request.user.is_authenticated:
+        view_history = ViewHistory.objects.filter(user=request.user).order_by('-timestamp')[:10]
+        for history in view_history:
+            story = Story.objects.get(id=history.story_id)
+            chapter = Chapter.objects.get(id=history.chapter_id)
+            story_chapter_list.append({'story': story, 'chapter': chapter})
+
+        print(story_chapter_list)
+        context = {
+            'view_history': view_history,
+            'story_chapter_list': story_chapter_list,
+            'user_not_login':user_not_login,
+            'user_login': user_login,
+        }
+        return render(request, 'app/history.html', context)
+    else:
+        context = {
+            'user_not_login': user_not_login,
+            'user_login': user_login,
+            'story_chapter_list': story_chapter_list,
+        }
+
+    return render(request, 'app/history.html', context)
+
