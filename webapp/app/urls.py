@@ -13,6 +13,7 @@ urlpatterns = [
     path('logout/', views.logoutPage, name="logout"),
     path('search/', views.searchProduct, name="search"),
     path('category/', views.category, name="category"),
+    path('story_follow/', views.story_follow, name="story_follow"),
 
     # TRUYỆN
     path('detail/', views.detail, name="detail"),
@@ -28,6 +29,8 @@ urlpatterns = [
     path('information/', views.Information, name="information"),
     path('edit_information/', views.edit_information, name="edit_information"),
     path('contact/', views.contact, name="contact"),
+
+
 
     # ADMIN
     path('manage/', views.Manage, name="manage"),

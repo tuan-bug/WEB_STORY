@@ -3,34 +3,69 @@
 {% load static %}
 {% block category_context %}
     {% include 'app/layout/message.html' %}
-    <section class=" ">
+    
+    <section class="product spad">
         <div class="container">
-            <div class="row featured__filter">
-                <div class="col-lg-12 col-md-6 col-sm-6 mix oranges fresh-meat">
-                    <div class="featured__controls">
-                        <h4 style="text-transform: uppercase; font-weight: 400;"> {{category.name }}</h4>
-
-                    </div>
-                </div>
-
-                {% for product in products %}
-                <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
-                    <div class="featured__item">
-                        <div class="featured__item__pic set-bg" data-setbg="{{product.ImageURL}}">
-                            <ul class="featured__item__pic__hover">
-
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#" data-product={{product.id}} data-action="add"  class="add-btn update-btn"><i class="fa fa-shopping-cart"></i></a></li>
+            <div class="row">
+                <div class="col-lg-4 col-md-5">
+                    <div class="sidebar">
+                        <div class="sidebar__item">
+                            <h4> Thể loại</h4>
+                            <ul>
+                                {% for category in categories %}
+                                	<li><a href="#">{{ category}}</a></li>
+                                {% endfor %}
                             </ul>
                         </div>
-                        <div class="featured__item__text">
-                            <h6><a href="{% url 'detail' %}?id={{ product.id }}">{{product.name}}</a></h6>
-                            <h5>${{product.price | floatformat:2}}</h5>
-                        </div>
                     </div>
                 </div>
-                {% endfor %}
+            
+                <div class="col-lg-8 col-md-7">
+                    <div class="filter__item">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5">
+                                <div class="filter__sort">
+                                    <span>Sắp xếp</span>
+                                    <select>
+                                        <option value="0">A - Z</option>
+                                        <option value="0">Z - A</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+                                <div class="filter__found">
+                                    <h6><span>16</span> Truyện </h6>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-3">
+                                <div class="filter__option">
+                                    <span class="icon_grid-2x2"></span>
+                                    <span class="icon_ul"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        {% for story in stories %}
+                        	<div class="col-lg-3 col-md-4 col-sm-6">
+                                <div class="product__item">
+                                    <div class="product__item__pic set-bg" data-setbg="{{story.ImageURL}}">
+                                    </div>
+                                    <div class="product__item__text">
+                                        <h6><a href="#">{{story.name}}</a></h6>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="product__pagination">
+                        <a href="#">1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#"><i class="fa fa-long-arrow-right"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

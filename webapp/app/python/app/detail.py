@@ -7,7 +7,6 @@ def detail(request):
     user_not_login = "none" if request.user.is_authenticated else "show"
     user_login = "show" if request.user.is_authenticated else "none"
 
-
     slug = request.GET.get('slug', '') # lấy slug khi người dùng vlick vào truyện nào đó
     story = Story.objects.get(slug=slug)
     print(story.slug)

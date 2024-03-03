@@ -105,3 +105,40 @@ def view_history(request):
 
     return render(request, 'app/history.html', context)
 
+
+def story_follow(request):
+    user_not_login = "none" if request.user.is_authenticated else "show"
+    user_login = "show" if request.user.is_authenticated else "none"
+
+    followed_stories = []  # Khởi tạo danh sách các câu chuyện mà người dùng đã theo dõi
+    if request.user.is_authenticated:
+        follows = Follow.objects.filter(user=request.user)
+        print('Following')
+        for follow in follows:
+            followed_stories.append(follow.story)
+
+    for story in followed_stories:
+        latest_chapter = story.chapters.order_by('-name').first()
+        if latest_chapter:
+            # Lấy số từ tên chương mới nhất
+            match = re.search(r'\d+', latest_chapter.name)
+            if match:
+                chapter_number = match.group()  # Lấy số từ kết quả phù hợp
+                story.chapter_number = chapter_number
+                story.latest_chapter_date = latest_chapter.date  # Lấy ngày của chương mới nhất
+                story.chapter_id = latest_chapter.id
+                print("Chapter number:", story.chapter_number )
+                print("Chapter id: ", story.chapter_id)
+                print("Latest chapter date:", latest_chapter.date)
+            else:
+                print("No number found in chapter name")
+        else:
+            print("No chapters found for story:", story.name)
+
+
+    context = {
+        'user_not_login': user_not_login,
+        'user_login': user_login,
+        'stories': followed_stories,
+    }
+    return render(request, 'app/follow.html', context)
