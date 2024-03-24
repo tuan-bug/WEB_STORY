@@ -24,13 +24,11 @@ def addStory(request):
     if request.method == 'POST':
         images = request.FILES.getlist('listImages')
         form = StoryForm(request.POST, request.FILES)
+        # print(form.category)
         if form.is_valid():
             instance = form.save()  # Lưu thông tin model vào cơ sở dữ liệu
+            print("Danh mục:", instance.category.all())
             print('oke luu thanh cong')
-            # for image in request.FILES.getlist('images'):
-            #     instance.image.create(image=image)
-            # for image in images:
-            #     photo = ImagesChapter.objects.create(story=instance, image=image)
             messages.success(request, 'Thêm truyện thành công')
             return redirect('manageStory')
         else:
@@ -40,7 +38,7 @@ def addStory(request):
     else:
         print('khog biet')
         print(request.method)
-        messages.error(request, 'Thêm sản truyện thất bại')
+        messages.error(request, 'Thêm truyện thất bại')
 
     context = {'form': form,
                'messages': messages,
@@ -89,10 +87,15 @@ def viewStory(request):
     print(user)
     story = get_object_or_404(Story, id=id)
     chapters = Chapter.objects.filter(story=story)
+    genres = story.category.all()
 
+    # In ra tên của các đối tượng Genre
+    for genre in genres:
+        print(genre.name)
     form_chapter = ChapterForm()
     context = {
         'story': story,
+        'genres': genres,
         'chapters': chapters,
         'form_chapter': form_chapter,
     }

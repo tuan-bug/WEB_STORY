@@ -1,4 +1,5 @@
 import requests
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
 from django import forms
@@ -135,7 +136,6 @@ class ViewHistory(models.Model):
 
 
 
-
 # Form của các Model
 class FormContact(forms.ModelForm):
     class Meta:
@@ -147,6 +147,31 @@ class FormContact(forms.ModelForm):
             'message': forms.Textarea(attrs={'placeholder': 'Nội dung ....'}),
         }
 class CreateUserForm(UserCreationForm):
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if len(username) < 6:
+            raise ValidationError("Tên đăng nhập phải chứa ít nhất 6 ký tự.")
+        return username
+
+    def clean_password1(self):
+        password1 = self.cleaned_data.get("password1")
+        if len(password1) < 8:
+            raise ValidationError("Mật khẩu phải chứa ít nhất 8 ký tự.")
+        return password1
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise ValidationError("Mật khẩu xác nhận không khớp.")
+        return password2
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+        return user
+
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 'password1','password2']

@@ -1,5 +1,6 @@
 # from itertools import product
 from django.contrib import messages
+from django.db.models import Sum
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
 from django.http import JsonResponse
@@ -8,7 +9,7 @@ from django.http import JsonResponse
 from .python.app.base import *
 from .python.app.follow import *
 
-from .python.app.category import category
+from .python.app.category import category, stories_by_category
 from .python.app.detail import detail, detail_chapter
 from .python.app.information import Information, edit_information
 from .python.app.login import loginPage, logoutPage
@@ -37,7 +38,7 @@ import urllib.parse
 import urllib.request
 import random
 import requests
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
@@ -142,3 +143,93 @@ def story_follow(request):
         'stories': followed_stories,
     }
     return render(request, 'app/follow.html', context)
+
+
+def ratting(request):
+    user_not_login = "none" if request.user.is_authenticated else "show"
+    user_login = "show" if request.user.is_authenticated else "none"
+    stories = Story.objects.all()
+
+    context = {
+        'user_not_login': user_not_login,
+        'user_login': user_login,
+        'stories': stories
+    }
+    return render(request, 'app/ratting.html', context)
+
+
+def ratting_date(request):
+    # Kiểm tra người dùng đăng nhập
+    user_not_login = "none" if request.user.is_authenticated else "show"
+    user_login = "show" if request.user.is_authenticated else "none"
+    current_date = date.today()
+
+    # Lấy ngày hiện tại
+    current_date = date.today()
+
+    # Tính ngày 7 ngày trước
+    date_7_days_ago = current_date - timedelta(days=100)
+
+    # Lấy danh sách các chapter có lượt xem nhiều trong 7 ngày qua
+    popular_chapters = Chapter.objects.filter(date__range=[date_7_days_ago, current_date]) \
+                           .annotate(total_views=Sum('view')) \
+                           .order_by('-total_views')[:20]
+
+    print(popular_chapters)
+    context = {
+        'user_not_login': user_not_login,
+        'user_login': user_login,
+        'stories': popular_chapters
+    }
+    return render(request, 'app/ratting.html', context)
+
+
+def ratting_month(request):
+    # Kiểm tra người dùng đăng nhập
+    user_not_login = "none" if request.user.is_authenticated else "show"
+    user_login = "show" if request.user.is_authenticated else "none"
+    current_date = date.today()
+
+    # Lấy ngày hiện tại
+    current_date = date.today()
+
+    # Tính ngày 7 ngày trước
+    date_7_days_ago = current_date - timedelta(days=100)
+
+    # Lấy danh sách các chapter có lượt xem nhiều trong 7 ngày qua
+    popular_chapters = Chapter.objects.filter(date__range=[date_7_days_ago, current_date]) \
+                           .annotate(total_views=Sum('view')) \
+                           .order_by('-total_views')[:20]
+
+    print(popular_chapters)
+    context = {
+        'user_not_login': user_not_login,
+        'user_login': user_login,
+        'stories': popular_chapters
+    }
+    return render(request, 'app/ratting.html', context)
+
+def ratting_year(request):
+    # Kiểm tra người dùng đăng nhập
+    user_not_login = "none" if request.user.is_authenticated else "show"
+    user_login = "show" if request.user.is_authenticated else "none"
+    current_date = date.today()
+
+    # Lấy ngày hiện tại
+    current_date = date.today()
+
+    # Tính ngày 7 ngày trước
+    date_7_days_ago = current_date - timedelta(days=100)
+
+    # Lấy danh sách các chapter có lượt xem nhiều trong 7 ngày qua
+    popular_chapters = Chapter.objects.filter(date__range=[date_7_days_ago, current_date]) \
+                           .annotate(total_views=Sum('view')) \
+                           .order_by('-total_views')[:20]
+
+    print(popular_chapters)
+    context = {
+        'user_not_login': user_not_login,
+        'user_login': user_login,
+        'stories': popular_chapters
+    }
+    return render(request, 'app/ratting.html', context)

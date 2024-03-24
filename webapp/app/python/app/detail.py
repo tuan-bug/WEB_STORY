@@ -9,7 +9,9 @@ def detail(request):
 
     slug = request.GET.get('slug', '') # lấy slug khi người dùng vlick vào truyện nào đó
     story = Story.objects.get(slug=slug)
-    print(story.slug)
+    categories_story = story.category.values_list('slug', flat=True)
+    category_names = Genre.objects.filter(id__in=categories_story).values_list('name', flat=True)
+    print(story.category)
     chapters = Chapter.objects.filter(story=story)
     if chapters.exists():
         first_chapter = chapters.first()

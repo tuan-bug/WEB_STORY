@@ -12,7 +12,17 @@ urlpatterns = [
     path('register/', views.register, name="register"),
     path('logout/', views.logoutPage, name="logout"),
     path('search/', views.searchProduct, name="search"),
+    #BXH
+    path('ratting/', views.ratting, name="ratting"),
+    path('ratting_date/', views.ratting_date, name="ratting_date"),
+    path('ratting_month/', views.ratting_month, name="ratting_month"),
+    path('ratting_year/', views.ratting_year, name="ratting_year"),
+
+
+    # THỂ LOẠI
     path('category/', views.category, name="category"),
+    path('category/<int:category_id>/', views.stories_by_category, name='stories_by_category'),
+
     path('story_follow/', views.story_follow, name="story_follow"),
 
     # TRUYỆN
