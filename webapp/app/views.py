@@ -171,15 +171,17 @@ def ratting_date(request):
     date_7_days_ago = current_date - timedelta(days=100)
 
     # Lấy danh sách các chapter có lượt xem nhiều trong 7 ngày qua
-    popular_chapters = Chapter.objects.filter(date__range=[date_7_days_ago, current_date]) \
-                           .annotate(total_views=Sum('view')) \
-                           .order_by('-total_views')[:20]
+    popular_stories = Story.objects.filter(chapters__date__range=[date_7_days_ago, current_date]) \
+                           .annotate(total_views=Sum('chapters__view')) \
+                           .order_by('-total_views')[:10]
 
-    print(popular_chapters)
+    print(popular_stories)
+    for story in popular_stories:
+        print(story.total_views)
     context = {
         'user_not_login': user_not_login,
         'user_login': user_login,
-        'stories': popular_chapters
+        'stories': popular_stories
     }
     return render(request, 'app/ratting.html', context)
 

@@ -125,14 +125,29 @@
                                 </form>
                             {% endif %}
                         {% else %}
-                            <!-- Hiển thị lời nhắc đăng nhập nếu người dùng chưa đăng nhập -->
-                            <form action="{% url 'follow_story' story.id %}" method="post">
-                                {% csrf_token %}
-                                <button class="primary-btn btn-sm border-0" type="submit">Theo dõi</button>
-                            </form>
+                            
+                            <button class="primary-btn btn-sm border-0" data-bs-toggle="modal" data-bs-target="#exampleModalFollow">Theo dõi</button>
+                            
+                            <div class="modal fade" id="exampleModalFollow" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="fs-5">Popover in a modal</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Bạn cần đăng nhập để thực hiện chức năng theo dõi. Bạn có muốn đăng nhập không ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                        <a href="{% url 'login' %}" class="btn btn-primary">Đồng ý</a>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
                         {% endif %}
-
-{#                        <a style="color: white;" class="primary-btn btn-sm border-0 " href="{% url 'addAddress' %}">Theo dõi</a>#}
                     </div>
 
                     </div>

@@ -25,7 +25,7 @@ def detail(request):
     if first_chapter and last_chapter:
         print(first_chapter.id)
         print(last_chapter.id)
-
+    follow = ''
     if request.user.is_authenticated:
         follow = Follow.objects.filter(user=request.user, story=story)
     context = {

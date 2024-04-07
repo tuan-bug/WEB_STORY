@@ -78,6 +78,11 @@ class Story(models.Model):
         except:
             url = ''
         return url
+    
+    def update_total_views(self):
+        total_views = sum(chapter.view for chapter in self.chapters.all())
+        self.view = total_views
+        self.save()
 
 class Chapter(models.Model):
     story = models.ForeignKey(Story, on_delete=models.CASCADE, related_name='chapters')
