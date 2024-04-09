@@ -80,7 +80,7 @@
                         <thead>
                             <tr>
                                 <th>Số chap</th>
-                                <th></th>
+                                
                                 <th>Sắp xếp</th>
                                 
                             </tr>
@@ -88,10 +88,10 @@
                         <tbody>
                             {% for chapter in chapters %}
                                 <tr>
-                                    <td>
+                                    {% comment %} <td>
                                         <img style="max-width: 100px" src="{{ chapter.ImageURL }}" alt="">
                                         
-                                    </td>
+                                    </td> {% endcomment %}
                                     <td>{{ chapter.name }}</td>
                                     <td>{{ chapter.date }}</td>
                                 </tr>

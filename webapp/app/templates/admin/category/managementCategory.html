@@ -6,8 +6,40 @@
        <h2 class="text-center">QUẢN LÝ DANH MỤC</h2>
         <div class="container-fluid">
             <div class="text-right mb-3">
-                <button class="btn btn-primary btn-icon-split p-2" data-toggle="modal" ><a style="color: white" href="{% url 'addCategory' %}">Thêm danh mục</a></button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalAddCategory">
+                    Thêm danh mục
+                </button>
+                {% comment %} //{% include 'admin/category/addCategory.html' %} {% endcomment %}
             </div>
+            
+            {% comment %} <div class="modal fade" id="exampleModalAddCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm danh mục</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" action="{% url 'addCategory' %}" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="categoryDescription">Tên Danh Mục <span class="required">*</span></label>
+                                    {{ form.name }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="categoryDescription">Đường Dẫn <span class="required">*</span></label>
+                                    {{ form.slug }}
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Lưu lại</button>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div> {% endcomment %}
 
             <div class="card shadow mb-4">
                 <div class="card-body">
@@ -25,46 +57,53 @@
 
                             <tbody>
                                 {% for category in categories %}
-                                <tr>
-                                    <td>
-                                        {{ category.id }}
-                                    </td>
-                                    
-                                    <td>
-                                        {{ category.name }}
-                                    </td>
-                                    <td>
-                                        {{ category.slug }}
-                                    </td>
-                                    <td>
-                                        <a href="{% url 'editCategory' %}?id={{ category.id }}" class="mr-2 btn btn-warning btn-circle">
-                                            <img src="{% static 'admin/icons/pen (1).png' %}" alt="">
-                                        </a>
-                                        <a href="" data-product-id="{{ category.id }}"
+                                    <tr>
+                                        <td>
+                                            {{ category.id }}
+                                        </td>
+                                        
+                                        <td>
+                                            {{ category.name }}
+                                        </td>
+                                        <td>
+                                            {{ category.slug }}
+                                        </td>
+                                        <td>
+                                            <!-- Button trigger modal -->
+                                            <a href="#" class="mr-2 btn btn-warning btn-circle" data-bs-toggle="modal" data-bs-target="#exampleModalEditCategory-{{category.id}}">
+                                                <img src="{% static 'admin/icons/pen (1).png' %}" alt="">
+                                            </a>
+                                            <!-- Modal -->
+
+                                            <a href="" data-product-id="{{ category.id }}"
                                             data-product-name="{{ category.name }}"
                                             class="mr-2 btn btn-danger btn-circle"
                                             data-toggle="modal" data-target="#deleteCategoryModal_{{ category.id }}">
                                             <img src="{% static 'admin/icons/trash (1).png' %}" alt="">
-                                        </a>
-                                        <div class="modal" id="deleteCategoryModal_{{ category.id }}">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Xóa Danh Mục</h5>
-                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>Bạn có chắc chắn muốn xóa danh mục sản phẩm <span id="product-name"></span>?</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                                        <a href="{% url 'deleteCategory' category.id %}" type="button" class="delete-product btn btn-danger">Xác nhận</a>
+                                            </a>
+                                            {% comment %} <!-- Modal -->
+                                            {% include 'admin/category/deleteCategory.html' %} {% endcomment %}
+                                            <div class="modal" id="deleteCategoryModal_{{ category.id }}">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Xóa Danh Mục</h5>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Bạn có chắc chắn muốn xóa danh mục sản phẩm <span id="product-name"></span>?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                                            <a href="{% url 'deleteCategory' category.id %}" type="button" class="delete-product btn btn-danger">Xác nhận</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                            {% include 'admin/category/editCategory.html' %}
+
+                                        </td>
+                                    </tr>
                                 {% endfor %}
                             </tbody>
                         </table>

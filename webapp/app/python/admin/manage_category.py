@@ -10,6 +10,7 @@ from app.python.admin.manage import is_admin
 @login_required
 @user_passes_test(is_admin)
 def manageCategory(request):
+    form = AddCategory()
     categories = Genre.objects.all().order_by('name')  # lay cac damh muc lon
     paginator = Paginator(categories, 6)
     page_number = request.GET.get('page')
@@ -19,6 +20,7 @@ def manageCategory(request):
     context ={'categories': page_categories,
               'feedback': feedback,
               'contacts': contacts,
+              'form': form,
               }
     return render(request, 'admin/category/managementCategory.html', context)
 def addCategory(request):
@@ -40,7 +42,7 @@ def addCategory(request):
 
 def editCategory(request):
     id = request.GET.get('id', '')  # lấy id khi người dùng vlick vào sản phẩm nào đó
-    category = get_object_or_404(Category, id=id)
+    category = get_object_or_404(Genre, id=id)
     if request.method == 'POST':
         form = AddCategory(request.POST, request.FILES, instance=category)
         if form.is_valid():
@@ -56,7 +58,6 @@ def editCategory(request):
                                 'is_sub': category.is_sub,
                                 'name': category.name,
                                 'slug': category.slug,
-                                'image': category.image,
                                 'messages': messages,
                                 })
 
@@ -67,8 +68,8 @@ def editCategory(request):
 
 def deleteCategory(request, id):
     # id = request.GET.get('id', '')  # lấy id khi người dùng vlick vào sản phẩm nào đó
-    category = get_object_or_404(Category, id=id)
-    Category.objects.filter(id=id).delete()
+    category = get_object_or_404(Genre, id=id)
+    Genre.objects.filter(id=id).delete()
     messages.success(request, 'Đã xóa danh mục')
     return redirect('manageCategory')
     context ={'category': category,

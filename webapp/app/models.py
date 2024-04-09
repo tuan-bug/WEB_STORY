@@ -228,3 +228,12 @@ class ChapterForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'image': forms.FileInput(attrs={'class': 'form-control'})
         }
+    
+class AddCategory(forms.ModelForm):
+    class Meta:
+        model = Genre
+        fields = ['name', 'slug']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'slug': forms.TextInput(attrs={'class': 'form-control'})
+        }
