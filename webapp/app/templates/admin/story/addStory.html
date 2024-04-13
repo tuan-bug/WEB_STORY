@@ -1,138 +1,172 @@
 
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-    {% include 'admin/layout/head.html' %}
-    <body id="page-top">
-    <div id="wrapper">
-        <!-- Sidebar -->
-        {% include 'admin/layout/sidebar.html' %}
-            <div id="content-wrapper" class="d-flex flex-column">
-            {% include 'admin/layout/topbar.html' %}
-                <div class="container mt-4" style="width: 550px; border: #1b1e21">
-                <h2 class="mb-4 text-center">THÊM TRUYỆN MỚI</h2>
-                <form method="POST" action="" enctype="multipart/form-data">
+
+<div class="modal fade" id="exampleModalAddStory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-3" id="exampleModalLabel">Thêm truyện mới</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{% url 'addStory' %}" enctype="multipart/form-data">
+                <div class="modal-body">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <label for="categoryName">Tên Truyện <span class="required">*</span></label>
-                        {{ form.name }}
-                    </div>
-                    <div class="form-group">
-                        <label for="categoryDescription">Đường dẫn <span class="required">*</span></label>
-                        {{ form.slug }}
-                    </div>
-                    <div class="form-group">
-                        <label for="categoryDescription">Thuộc danh mục <span class="required">*</span></label>
-                        {{ form.category }}
-                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="categoryName">Tên Truyện <span class="required">*</span></label>
+                                {{ form.name }}
+                                <span style="font-size: 12px; color: red;" id="errorNameStory"></span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="categoryDescription">Đường dẫn <span class="required">*</span></label>
+                                {{ form.slug }}
+                                <span style="font-size: 12px; color: red;" id="errorSlugStory"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="categoryDescription">Tác giả</label>
+                                {{ form.author }}
+                                <span style="font-size: 12px; color: red;" id="errorAuthorStory"></span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="{{ form.status.id_for_label }}">Trạng thái <span class="required">*</span></label>
+                                {{ form.status }}
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="categoryDescription">Truyện mới</label>
+                                {{ form.story_new }}
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Chọn ảnh truyện: </label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        {{ form.image }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 ">
+                            <div class="form-group">
+                                <label for="{{ form.category.id_for_label }}">Thuộc danh mục <span class="required">*</span></label><br>
+                                <div class="row justify-content-center">
+                                    
+                                    {% for category in form.category.field.choices %}
+                                    <div class="form-check form-check-inline col-2 p-2">
+                                        <input type="checkbox" id="category_{{ category.0 }}" name="category" value="{{ category.0 }}">
+                                        <label for="category_{{ category.0 }}">{{ category.1 }}</label><br>
+                                    </div>
+                                        
+                                    {% endfor %}
 
-{#                    <div class="form-group">#}
-{#                        <label for="{{ form.category.id_for_label }}">Thuộc danh mục <span class="required">*</span> </label><br>#}
-{#                        <div class="">#}
-{#                            {% for choice in form.category %}#}
-{#                                <div class="form-check form-check-inline ">#}
-{#                                    {{ choice }}#}
-{#                                    <label class="form-check-label d-flex" for="{{ choice.id_for_label }}"></label>#}
-{#                                </div>#}
-{#                            {% endfor %}#}
-{#                        </div>#}
-{#                    </div>#}
-
-                    <div class="form-group">
-                        <label for="categoryDescription">Mô tả <span class="required">*</span></label>
-                        {{ form.description }}
-                    </div>
-
-                    <div class="form-group">
-                        <label for="categoryDescription">Tác giả</label>
-                        {{ form.author }}
-                    </div>
-
-                    <div class="form-group">
-                        <label for="{{ form.status.id_for_label }}">Trạng thái <span class="required">*</span></label>
-                        {{ form.status }}
-                    </div>
-
-
-                    <div class="form-group">
-                        <label for="categoryDescription">Truyện mới</label>
-                        {{ form.story_new }}
-                    </div>
-                
-                    <div class="form-group">
-                        <label>Chọn ảnh truyện: </label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                {{ form.image }}
+                                    {% comment %} {% for choice in form.category %}
+                                        <div class="form-check form-check-inline col-2 p-2">
+                                            <input class="form-check-input" type="checkbox" name="{{ form.category.html_name }}" value="{{ choice.choice_label }}" id="{{ choice.id_for_label }}">
+                                            <label class="form-check-label" for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label>
+                                        </div>
+                                    {% endfor %} {% endcomment %}
+                                </div>
+                                <span style="font-size: 12px; color: red;" id="errorCategoryStory"></span>
+                            </div>
+                        </div>
+                        
+                        
+                       
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="categoryDescription">Mô tả </label>
+                                {{ form.description }}
                             </div>
                         </div>
                     </div>
-
-{#                    <div class="form-group">#}
-{#                         <label>Ảnh truyện</label>#}
-{#                        <input type="file" class="form-control" name="listImages" multiple>#}
-{#                    </div>#}
-
-                     <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-primary text-center">Thêm truyện</button>
-                    </div>
-                </form>
-            </div>
-            <!-- Footer -->
-                <footer class="sticky-footer bg-white">
-                    <div class="container my-auto">
-                        <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; Your Website 2021</span>
-                        </div>
-                    </div>
-                </footer>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay lại</button>
+                    <button type="submit" class="btn btn-primary" id="saveStoryBtn">Lưu lại</button>
+                </div>
+            </form>
         </div>
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-    <!-- Logout Modal-->
-    {% include 'admin/layout/modal.html' %}
-    {% include 'admin/layout/script.html' %}
+    </div>
+</div>
 
-    <style>
-        .required{
-        color: red;
-        margin-left: 3px;
-        }
-        #id_image, #id_status, #id_story_new{
-            display: block;
-            width: 100%;
-            height: calc(1.5em + 0.75rem + 2px);
-            padding: 0.375rem 0.75rem;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #6e707e;
-            background-color: #fff;
-            background-clip: padding-box;
-            border: 1px solid #d1d3e2;
-            border-radius: 0.35rem;
-            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-        }
-        #id_category {
-            display: block;
-            width: 100%;
-            min-height: 200px;
-            height: calc(1.5em + 0.75rem + 2px);
-            padding: 0.375rem 0.75rem;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #6e707e;
-            background-color: #fff;
-            background-clip: padding-box;
-            border: 1px solid #d1d3e2;
-            border-radius: 0.35rem;
-            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-        }
+<style>
+    .required{
+    color: red;
+    margin-left: 3px;
+    }
+    #id_image, #id_status, #id_story_new{
+        display: block;
+        width: 100%;
+        height: calc(1.5em + 0.75rem + 2px);
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #6e707e;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #d1d3e2;
+        border-radius: 0.35rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    #id_category {
+        display: block;
+        width: 100%;
+        min-height: 200px;
+        height: calc(1.5em + 0.75rem + 2px);
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #6e707e;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #d1d3e2;
+        border-radius: 0.35rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        $(document).ready(function() {
+            $('#id_name').on('input', function() {
+                var name = $(this).val().trim();
+                var slug = removeVietnameseTones(name.toLowerCase()).replace(/\s+/g, '-');
+                $('#id_slug').val(slug);
+            });
         
-
-    </style>
-</body>
-</html>
+            function removeVietnameseTones(str) {
+                str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+                str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+                str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+                str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+                str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+                str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+                str = str.replace(/đ/g, "d");
+                // Some system encode vietnamese combining accent as individual utf-8 characters
+                // Một vài bộ encode coi các dấu mũ, dấu chữ như một kí tự riêng biệt nên thêm hai dòng này
+                str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // ̀ ́ ̃ ̉ ̣  huyền, sắc, ngã, hỏi, nặng
+                str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // ˆ ̆ ̛  Â, Ê, Ă, Ơ, Ư
+                // Remove extra spaces
+                // Bỏ các khoảng trắng liền nhau
+                str = str.replace(/ + /g, " ");
+                str = str.trim();
+                // Remove punctuations
+                // Bỏ dấu câu, kí tự đặc biệt
+                str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, "");
+                return str;
+            }
+        });
+        
+    });
+</script>

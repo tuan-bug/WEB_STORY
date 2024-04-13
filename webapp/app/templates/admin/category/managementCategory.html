@@ -2,16 +2,14 @@
 {% load static %}
 {% block blog-category %}
     {% include 'admin/layout/message.html' %}
-    <div class=" mt-4">
-       <h2 class="text-center">QUẢN LÝ DANH MỤC</h2>
+    <div class="mt-4">
+        <h2 class="text-center">QUẢN LÝ DANH MỤC</h2>
         <div class="container-fluid">
             <div class="text-right mb-3">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalAddCategory">
                     Thêm danh mục
                 </button>
-                {% comment %} //{% include 'admin/category/addCategory.html' %} {% endcomment %}
             </div>
-            
             {% comment %} <div class="modal fade" id="exampleModalAddCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
@@ -26,6 +24,7 @@
                                 <div class="form-group">
                                     <label for="categoryDescription">Tên Danh Mục <span class="required">*</span></label>
                                     {{ form.name }}
+                                    <span style="color: red; font-size: 12px;" id="nameError" ></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="categoryDescription">Đường Dẫn <span class="required">*</span></label>
@@ -34,13 +33,15 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                            <button type="submit" class="btn btn-primary">Lưu lại</button>
+                            <button type="submit" id="saveCategoryBtn" class="btn btn-primary">Lưu lại</button>
                         </div>
                     </form>
                   </div>
                 </div>
-              </div> {% endcomment %}
-
+              </div>
+            </div> {% endcomment %}
+            {% include 'admin/category/addCategory.html' %}
+            
             <div class="card shadow mb-4">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -48,60 +49,24 @@
                             <thead>
                                 <tr style="padding-bottom: 25px;">
                                     <th>ID</th>
-                                    
                                     <th>Tên Danh Mục</th>
                                     <th>Đường Dẫn</th>
                                     <th>Thao Tác</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 {% for category in categories %}
                                     <tr>
+                                        <td>{{ category.id }}</td>
+                                        <td>{{ category.name }}</td>
+                                        <td>{{ category.slug }}</td>
                                         <td>
-                                            {{ category.id }}
-                                        </td>
-                                        
-                                        <td>
-                                            {{ category.name }}
-                                        </td>
-                                        <td>
-                                            {{ category.slug }}
-                                        </td>
-                                        <td>
-                                            <!-- Button trigger modal -->
-                                            <a href="#" class="mr-2 btn btn-warning btn-circle" data-bs-toggle="modal" data-bs-target="#exampleModalEditCategory-{{category.id}}">
+                                            <button class="mr-2 btn btn-warning btn-circle" data-bs-toggle="modal" data-bs-target="#exampleModalEditCategory-{{category.id}}">
                                                 <img src="{% static 'admin/icons/pen (1).png' %}" alt="">
-                                            </a>
-                                            <!-- Modal -->
-
-                                            <a href="" data-product-id="{{ category.id }}"
-                                            data-product-name="{{ category.name }}"
-                                            class="mr-2 btn btn-danger btn-circle"
-                                            data-toggle="modal" data-target="#deleteCategoryModal_{{ category.id }}">
-                                            <img src="{% static 'admin/icons/trash (1).png' %}" alt="">
-                                            </a>
-                                            {% comment %} <!-- Modal -->
-                                            {% include 'admin/category/deleteCategory.html' %} {% endcomment %}
-                                            <div class="modal" id="deleteCategoryModal_{{ category.id }}">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Xóa Danh Mục</h5>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p>Bạn có chắc chắn muốn xóa danh mục sản phẩm <span id="product-name"></span>?</p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                                            <a href="{% url 'deleteCategory' category.id %}" type="button" class="delete-product btn btn-danger">Xác nhận</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {% include 'admin/category/editCategory.html' %}
-
+                                            </button>
+                                            <button class="mr-2 btn btn-danger btn-circle" data-toggle="modal" data-target="#deleteCategoryModal_{{ category.id }}">
+                                                <img src="{% static 'admin/icons/trash (1).png' %}" alt="">
+                                            </button>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -111,33 +76,139 @@
                 </div>
             </div>
 
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                {% if categories.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page=1">&laquo; Đầu</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ categories.previous_page_number }}">Trước</a>
-                    </li>
-                {% endif %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if categories.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">&laquo; Đầu</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ categories.previous_page_number }}">Trước</a>
+                        </li>
+                    {% endif %}
 
-                <li class="page-item disabled">
-                    <span class="page-link">
-                        Trang {{ categories.number }}
-                    </span>
-                </li>
+                    <li class="page-item disabled">
+                        <span class="page-link">Trang {{ categories.number }}</span>
+                    </li>
 
-                {% if categories.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ categories.next_page_number }}">Tiếp</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ categories.paginator.num_pages }}">Cuối &raquo;</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
+                    {% if categories.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ categories.next_page_number }}">Tiếp</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ categories.paginator.num_pages }}">Cuối &raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
         </div>
     </div>
+
+    <!-- Modal Edit Category -->
+    {% include 'admin/category/editCategory.html' %}
+    <!-- Modal Delete Category -->
+    {% include 'admin/category/deleteCategory.html' %}
+    
+    <script>
+        $(document).ready(function() {
+            $('#saveCategoryBtn').click(function(e) {
+                e.preventDefault(); // Ngăn chặn hành vi mặc định của nút submit
+        
+                var form = $('#exampleModalAddCategory form');
+                var listError = null;
+        
+                $.ajax({
+                    type: 'POST',
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            $('#exampleModalAddCategory').modal('hide');
+                            window.location.reload();
+                            // Thêm code để cập nhật giao diện nếu cần
+                        } else {
+                            if (response.errors) {
+                                $('#nameError').text(response.errors[0]); 
+                            }
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Xử lý lỗi AJAX
+                        var listError = JSON.parse(xhr.responseText); // Phân tích chuỗi JSON
+                        console.log("Lỗi LOLLL: ",listError)
+                        //console.log(listError.errors[0])
+                        $('#exampleModalAddCategory #nameError').val(listError.errors);
+                        if(listError.errors.name){
+                            console.log("HHHHHH")
+                            if(listError.errors.name[0] === "This field is required.")
+                                $('#nameError').text("Trường tên không được để trống");
+                        }
+                        if(listError.errors.slug){
+                            console.log("HHHHHH")
+                            if(listError.errors.slug[0] === "This field is required.")
+                                $('#slugError').text("Trường đường dẫn không được để trống");
+                        }
+                        else {
+                            $('#nameError').text(listError.errors);
+                        }
+                        
+                    }
+                });
+                return false; // Ngăn chặn mặc định chuyển hướng trang sau khi xử lý lỗi AJAX
+            });
+
+
+            $('form[id^="editCategoryForm"], form[id^="addCategoryForm"]').submit(function(e) {
+                e.preventDefault(); // Ngăn chặn hành động mặc định của biểu mẫu
+        
+                // Lấy ID của biểu mẫu và tạo URL
+                var formId = $(this).attr('id');
+                var categoryId = formId.split('-')[1]; // ID của category nếu là form sửa
+                var url = $(this).attr('action');
+                console.log(url)
+                // Gửi yêu cầu AJAX
+                // Trong phần AJAX của sửa danh mục
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            $('#exampleModalEditCategory-' + categoryId).modal('hide');
+                            window.location.reload();
+                        } else {
+                            console.error("Hi");
+                            $('#nameError-' + categoryId).text(response.errors);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        
+                        var listError = JSON.parse(xhr.responseText); // Phân tích chuỗi JSON
+                        //console.log("LỖI: ",listError.errors.slug[0])
+    
+                        if(listError.errors.name){
+                            console.log("HHHHHH")
+                            if(listError.errors.name[0] === "This field is required.")
+                                $('.error-' + categoryId).text("Trường tên không được để trống");
+
+                        }
+                        if(listError.errors.slug[0] === "This field is required."){
+                            console.log("AAAAA")
+                            $('.errorSlug-' + categoryId).text("Trường đường dẫn không được để trống");
+                        }
+                        else {
+                            $('.error-' + categoryId).text(listError.errors.name[0]);
+
+                        }
+                    }
+                });
+
+                return false;
+            });
+             
+        });
+        
+    </script>
+    
+
 {% endblock blog-category %}

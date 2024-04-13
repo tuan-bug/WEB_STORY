@@ -1,17 +1,19 @@
-<div class="modal" id="deleteCategoryModal_{{ category.id }}">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Xóa Danh Mục</h5>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>Bạn có chắc chắn muốn xóa danh mục sản phẩm <span id="product-name"></span>?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                <a href="{% url 'deleteCategory' category.id %}" type="button" class="delete-product btn btn-danger">Xác nhận</a>
+{% for category in categories %}
+    <div class="modal fade" id="deleteCategoryModal_{{ category.id }}" tabindex="-1" aria-labelledby="exampleModalLabelDeleteCategory" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xóa Danh Mục</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xóa danh mục truyện <span id="product-name"></span>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <a href="{% url 'deleteCategory' category.id %}" type="button" class="delete-product btn btn-danger">Xác nhận</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
+{%endfor%}

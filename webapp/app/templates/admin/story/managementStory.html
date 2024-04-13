@@ -6,8 +6,9 @@
         <h2 class="text-center">QUẢN LÝ TRUYỆN</h2>
         <div class="container-fluid">
             <div class="text-right mb-3">
-                <button class="btn btn-primary btn-icon-split p-2" data-toggle="modal" ><a style="color: white" href="{% url 'addStory' %}">Thêm truyện</a></button>
+                <button class="btn btn-primary btn-icon-split p-2" data-bs-toggle="modal" data-bs-target="#exampleModalAddStory" >Thêm truyện</button>
             </div>
+            {% include 'admin/story/addStory.html' %}
 
             <div class="card shadow mb-4">
                 <div class="card-body">
@@ -18,11 +19,9 @@
                                     <th>ID</th>
                                     <th>Ảnh</th>
                                     <th>Thông tin chi tiết</th>
-                                    
                                     <th>Thao Tác</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 {% for story in storys %}
                                     <tr>
@@ -40,10 +39,8 @@
                                                 <li><b>View: </b> {{ story.view }}</li>
                                                 <li><b>Số lượng bình luận: </b> {{ story.count_comment }}</li>
                                                 <li><b>Số lượt like: </b> {{ story.likes }}</li>
-    {#                                            <li><b>Mô tả: </b> {{ product.describe | truncatechars:50  }}</li>#}
                                             </ul>
                                         </td>
-                                        
                                         <td>
                                             <a style="" href="{% url 'viewStory' %}?id={{ story.id }}" class="btn btn-info btn-circle mr-2">
                                                 <img src="{% static 'admin/icons/view.png' %}" alt="">
@@ -112,4 +109,66 @@
             </nav>
         </div>
     </div>
+
+
+    <script>
+        $('#saveStoryBtn').click(function(e) {
+            e.preventDefault(); // Ngăn chặn hành vi mặc định của nút submit
+            console.log("Hiiii 4444");
+            var form = $('#exampleModalAddStory form');
+            var categories = [];
+        
+            // Collect selected categories
+            
+        
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function(response) {
+                    console.log("Hiiii 111: ", response);
+                    if (!response.success) {
+                        if (response.errors) {
+                            if (response.errors.name) {
+                                $('#errorNameStory').text("Tên không được để trống");
+                            }
+                            if (response.errors.slug) {
+                                $('#errorSlugStory').text("Đường dẫn không được để trống");
+                            }
+                            if (response.errors.author) {
+                                $('#errorAuthorStory').text("Tác giả không được để trống");
+                            }
+                            if (response.errors.category) {
+                                $('#errorCategoryStory').text("Danh mục không được để trống");
+                            }
+                        }
+                    } else {
+                        $('#exampleModalAddStory').modal('hide');
+                        window.location.reload();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Xử lý lỗi AJAX
+                    var listError = JSON.parse(xhr.responseText); // Phân tích chuỗi JSON
+                    console.log("Lỗi LOLLL: ", listError);
+                    if (listError.errors.name) {
+                        $('#errorNameStory').text("Tên không được để trống");
+                    }
+                    if (listError.errors.slug) {
+                        $('#errorSlugStory').text("Đường dẫn không được để trống");
+                    }
+                    if (listError.errors.author) {
+                        $('#errorAuthorStory').text("Tác giả không được để trống");
+                    }
+                    if (listError.errors.category) {
+                        $('#errorCategoryStory').text("Danh mục không được để trống");
+                    }
+                }
+            });
+            return false; // Ngăn chặn mặc định chuyển hướng trang sau khi xử lý lỗi AJAX
+        });
+        
+        
+        
+    </script>
 {% endblock blog-product %}

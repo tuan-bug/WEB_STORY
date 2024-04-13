@@ -1,8 +1,8 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import *
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
-
+#from forms import CreateUserForm
 from app.models import *
 from app.python.admin.manage import is_admin
 @login_required
@@ -12,16 +12,17 @@ def manageUser(request):
     feedback = Contact.objects.all().count()
     contacts = Contact.objects.all()
     # us = users.staff_status
+    form = CreateUserForm()
     print('hahaha: ')
 
     context = {'users': users,
                'feedback': feedback,
                'contacts': contacts,
+               'form': form,
                }
     return render(request, 'admin/users/manageUser.html', context)
 
 def addUser(request):
-    form = CreateUserForm()
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid(): # kiểm tra đúng yêu cầu thì lưu cái form đó lại
@@ -33,7 +34,7 @@ def addUser(request):
     else:
         messages.error(request, 'Thêm người dùng thất bại')
 
-    context = {'form': form,
+    context = {
                'messages': messages,
                }
     return render(request, 'admin/users/addUser.html', context)

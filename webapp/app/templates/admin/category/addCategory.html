@@ -1,27 +1,31 @@
+
+
 <div class="modal fade" id="exampleModalAddCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm danh mục</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form method="POST" action="{% url 'addCategory' %}" enctype="multipart/form-data">
-            <div class="modal-body">
-                
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="categoryDescription">Tên Danh Mục <span class="required">*</span></label>
-                        {{ form.name }}
-                    </div>
-                    <div class="form-group">
-                        <label for="categoryDescription">Đường Dẫn <span class="required">*</span></label>
-                        {{ form.slug }}
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="submit" class="btn btn-primary">Lưu lại</button>
-            </div>
-        </form>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm danh mục</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST" action="{% url 'addCategory' %}" enctype="multipart/form-data">
+          <div class="modal-body">
+                  {% csrf_token %}
+                  <div class="form-group">
+                      <label for="categoryDescription">Tên Danh Mục <span class="required">*</span></label>
+                      {{ form.name }}
+                      <span style="color: red; font-size: 12px;" id="nameError" ></span>
+                  </div>
+                  <div class="form-group">
+                      <label for="categoryDescription">Đường Dẫn <span class="required">*</span></label>
+                      {{ form.slug }}
+                      <span style="color: red; font-size: 12px;" id="slugError" ></span>
+                  </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+              <button type="submit" id="saveCategoryBtn" class="btn btn-primary">Lưu lại</button>
+          </div>
+      </form>
     </div>
+  </div>
 </div>

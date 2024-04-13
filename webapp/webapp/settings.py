@@ -36,6 +36,7 @@ SECRET_KEY = 'django-insecure-+#2@!=w3*=97b*)ai_8m=b3@%wm@_y6j-b189*%yeld&xszmm!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+LANGUAGE_CODE = 'vi'
 
 
 # Application definition

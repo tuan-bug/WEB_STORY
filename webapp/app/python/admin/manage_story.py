@@ -13,38 +13,30 @@ from app.python.admin.manage import is_admin
 @user_passes_test(is_admin)
 def manageStory(request):
     storys = Story.objects.all()
+    categories = Genre.objects.all()
     form = StoryForm()
     context = {'storys': storys,
+               'categories': categories,
                'form': form,
         }
     return render(request, 'admin/story/managementStory.html', context)
 
 def addStory(request):
     form = StoryForm()
+    errors = None  # Khởi tạo biến errors ở đây
     if request.method == 'POST':
         images = request.FILES.getlist('listImages')
         form = StoryForm(request.POST, request.FILES)
-        # print(form.category)
         if form.is_valid():
+            categories = request.POST.getlist('categories')
             instance = form.save()  # Lưu thông tin model vào cơ sở dữ liệu
-            print("Danh mục:", instance.category.all())
-            print('oke luu thanh cong')
             messages.success(request, 'Thêm truyện thành công')
-            return redirect('manageStory')
+            return JsonResponse({'success': "Thêm danh mục thành công"})
         else:
-            print('lỗi form')
-            print(form.errors)
-            messages.error(request, 'Thêm truyện thất bại')
+           errors = form.errors  # Lấy ra lỗi của trường 'name'
+           return JsonResponse({'success': False, 'errors': errors}, status=400)
     else:
-        print('khog biet')
-        print(request.method)
-        messages.error(request, 'Thêm truyện thất bại')
-
-    context = {'form': form,
-               'messages': messages,
-               }
-    return render(request, 'admin/story/addStory.html', context)
-
+        return JsonResponse({'success': False, 'errors': errors}, status=405)
 
 def editStory(request):
     id = request.GET.get('id', '')  # lấy id khi người dùng vlick vào sản phẩm nào đó

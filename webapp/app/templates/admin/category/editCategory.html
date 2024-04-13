@@ -1,30 +1,34 @@
-<div class="modal fade" id="exampleModalEditCategory-{{category.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Modal Edit Category -->
+{% for category in categories %}
+<div class="modal fade" id="exampleModalEditCategory-{{category.id}}" tabindex="-1" aria-labelledby="exampleModalLabelEditCategory" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Sửa Danh Mục</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Sửa Danh Mục</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editCategoryForm-{{category.id}}" method="POST" action="{% url 'editCategory' %}?id={{ category.id }}">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ category.id }}">
+                    <div class="form-group">
+                        <label for="editCategoryName">Tên Danh Mục</label>
+                        <input type="text" class="form-control" id="editCategoryName-{{category.id}}" name="name" value="{{ category.name }}">
+                        <span style="color: red; font-size: 12px;" class="error-{{category.id}}"></span>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="editCategorySlug">Đường Dẫn</label>
+                        <input type="text" class="form-control" id="editCategorySlug-{{category.id}}" name="slug" value="{{ category.slug }}">
+                        <span style="color: red; font-size: 12px;" class="errorSlug-{{category.id}}"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" form="editCategoryForm-{{category.id}}" class="btn btn-primary">Lưu Thay Đổi</button>
+                </div>
+            </form>
         </div>
-        <form id="editCategoryForm" method="POST" action="{% url 'editCategory' %}?id={{ category.id }}">
-            <div class="modal-body">
-                <!-- Form to edit category -->
-                
-                {% csrf_token %}
-                <input type="hidden" name="id" value="{{ category.id }}">
-                <div class="form-group">
-                    <label for="categoryDescription">Tên Danh Mục</label>
-                    <input type="text" class="form-control" id="editCategoryName" name="name" value="{{ category.name }}">
-                </div>
-                <div class="form-group">
-                    <label for="categoryDescription">Đường Dẫn</label>
-                    <input type="text" class="form-control" id="editCategorySlug" name="slug" value="{{ category.slug }}">
-                </div>
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <button type="submit" form="editCategoryForm" class="btn btn-primary">Lưu Thay Đổi</button>
-            </div>
-        </form>
     </div>
 </div>
+{% endfor %}

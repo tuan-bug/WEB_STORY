@@ -1,0 +1,2 @@
+msgid "This field is required."
+msgstr "Trường này không được để trống."

@@ -6,9 +6,71 @@
         <h2 class="text-center">QUẢN LÝ THÀNH VIÊN</h2>
         <div class="container-fluid">
             <div class="text-right mb-3">
-                <button class="btn btn-primary btn-icon-split p-2" data-toggle="modal" ><a style="color: white" href="{% url 'addUser' %}">Thêm người dùng</a></button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalAddUser">
+                    Thêm người dùng
+                </button>
             </div>
-
+            {% comment %} {% include 'admin/users/addUser.html' %} {% endcomment %}
+            {% comment %} Model Add {% endcomment %}
+            <div class="modal fade" id="exampleModalAddUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm danh mục</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" action="{% url 'addUser' %}" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="name">Tên đăng nhập:</label>
+                                        {{form.username}}
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="email">Email:</label>
+                                        {{form.email}}
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="email">Họ:</label>
+                                        {{form.first_name}}
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="email">Tên:</label>
+                                        {{form.last_name}}
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="password">Mật khẩu:</label>
+                                        {{form.password1}}
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="confirm-password">Xác nhận mật khẩu:</label>
+                                        {{form.password2}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay lại</button>
+                            <button type="submit" class="btn btn-primary">Lưu lại</button>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% include 'admin/users/editUser.html' %}
             <div class="card shadow mb-4">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -47,33 +109,21 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <a href="{% url 'editUser' %}?id={{ user.id }}" class="btn btn-warning btn-circle mr-2">
-                                            <img src="{% static 'admin/icons/pen (1).png' %}" alt="">
+                                            <a href="{% url 'editUser' %}?id={{ user.id }}"
+                                                class="btn btn-warning btn-circle mr-2" data-bs-toggle="modal" data-bs-target="#exampleModalEditUser-{{user.id}}">
+                                                
+                                                <img src="{% static 'admin/icons/pen (1).png' %}" alt="">
                                             </a>
+                                            {% comment %} {% include 'admin/users/editUser.html' %} {% endcomment %}
                                             <a href="" data-product-id="{{ order.id }}"
-                                            data-product-name="{{ order.name }}"
-                                            class="btn btn-danger btn-circle"
-                                            data-toggle="modal" data-target="#deleteUserModal_{{ user.id }}">
-                                            <img src="{% static 'admin/icons/trash (1).png' %}" alt="">
-                                            </a>
+                                                data-product-name="{{ order.name }}"
+                                                class="btn btn-danger btn-circle"
+                                                data-toggle="modal" data-target="#deleteUserModal_{{ user.id }}">
 
-                                            <div class="modal" id="deleteUserModal_{{user.id }}">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Xóa Thông TIn Người Dùng </h5>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p>Bạn có chắc chắn muốn xóa thông tin người dùng không <span id="product-name"></span>?</p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                                            <a href="{% url 'deleteUser' user.id %}" type="button" class="delete-product btn btn-danger">Xác nhận</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                <img src="{% static 'admin/icons/trash (1).png' %}" alt="">
+                                            </a>
+                                            {% include 'admin/users/delete.html' %}
+                                            
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -84,4 +134,6 @@
             </div>
         </div>
     </div>
+
+    
 {% endblock blog-product %}

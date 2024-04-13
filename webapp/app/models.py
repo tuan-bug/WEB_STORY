@@ -10,7 +10,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.text import slugify
-
+from django.core.validators import MinLengthValidator, ValidationError
 
 
 class Contact(models.Model):
@@ -40,10 +40,10 @@ class Customer(models.Model):
             url = ''
         return url
 class Genre(models.Model):
-    sub_category = models.ForeignKey('self', on_delete=models.CASCADE, related_name='sub_genre', null=True, blank=True)
-    is_sub = models.BooleanField(default=False)
-    name = models.CharField(max_length=200, null=True)
-    slug = models.CharField(max_length=200, null=True)
+    name = models.CharField(max_length=200, null=False, 
+                            validators=[MinLengthValidator(6, "Tên danh mục phải có ít nhất 6 kí tự.")],
+                            error_messages={'null': 'Trường này không được để trống.'})
+    slug = models.CharField(max_length=200, null=False)
     def __str__(self):
         return self.name
 
@@ -58,13 +58,13 @@ class Story(models.Model):
         ('new', 'Mới'),
         ('not_new', 'Không mới'),
     ]
-    name = models.CharField(max_length=200, null=True)
-    slug = models.CharField(max_length=200, null=True,blank=True)
-    category = models.ManyToManyField(Genre, related_name='story_genre', blank=True)
+    name = models.CharField(max_length=200, null=False)
+    slug = models.CharField(max_length=200, null=False,blank=False)
+    category = models.ManyToManyField(Genre, related_name='story_genre', blank=False, null=False)
     image = models.ImageField(null=True, blank=True)
-    author = models.CharField(max_length=200, null=True)
+    author = models.CharField(max_length=200, null=False)
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='ongoing')
-    description = models.TextField(null=True)
+    description = models.TextField(null=True, blank=True)
     view = models.IntegerField(default=0)
     count_comment = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
@@ -87,7 +87,7 @@ class Story(models.Model):
 class Chapter(models.Model):
     story = models.ForeignKey(Story, on_delete=models.CASCADE, related_name='chapters')
     image = models.ImageField(null=True, blank=True)
-    name = models.CharField(max_length=200, null=True)
+    name = models.CharField(max_length=200, null=False)
     date = models.DateField(default=timezone.now, null=True)
     view = models.IntegerField(default=0)
     def ImageURL(self):
@@ -151,31 +151,32 @@ class FormContact(forms.ModelForm):
             'email': forms.TextInput(attrs={'placeholder': 'Email của bạn'}),
             'message': forms.Textarea(attrs={'placeholder': 'Nội dung ....'}),
         }
+
 class CreateUserForm(UserCreationForm):
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        if len(username) < 6:
-            raise ValidationError("Tên đăng nhập phải chứa ít nhất 6 ký tự.")
-        return username
+    # def clean_username(self):
+    #     username = self.cleaned_data['username']
+    #     if len(username) < 6:
+    #         raise ValidationError("Tên đăng nhập phải chứa ít nhất 6 ký tự.")
+    #     return username
 
-    def clean_password1(self):
-        password1 = self.cleaned_data.get("password1")
-        if len(password1) < 8:
-            raise ValidationError("Mật khẩu phải chứa ít nhất 8 ký tự.")
-        return password1
+    # def clean_password1(self):
+    #     password1 = self.cleaned_data.get("password1")
+    #     if len(password1) < 8:
+    #         raise ValidationError("Mật khẩu phải chứa ít nhất 8 ký tự.")
+    #     return password1
 
-    def clean_password2(self):
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
-            raise ValidationError("Mật khẩu xác nhận không khớp.")
-        return password2
+    # def clean_password2(self):
+    #     password1 = self.cleaned_data.get("password1")
+    #     password2 = self.cleaned_data.get("password2")
+    #     if password1 and password2 and password1 != password2:
+    #         raise ValidationError("Mật khẩu xác nhận không khớp.")
+    #     return password2
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        if commit:
-            user.save()
-        return user
+    # def save(self, commit=True):
+    #     user = super().save(commit=False)
+    #     if commit:
+    #         user.save()
+    #     return user
 
     class Meta:
         model = User
@@ -189,12 +190,6 @@ class CreateUserForm(UserCreationForm):
             'password2': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
-class CustomUserChangeForm(UserChangeForm):
-    class Meta(UserChangeForm.Meta):
-        fields = ('username', 'email', 'first_name', 'last_name')
-
-
-
 class StoryForm(forms.ModelForm):
     class Meta:
         model = Story
@@ -203,7 +198,7 @@ class StoryForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'slug': forms.TextInput(attrs={'class': 'form-control'}),
             # 'category': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
             'author': forms.TextInput(attrs={'class': 'form-control'}),
             #'status': forms.TextInput(attrs={'class': 'form-control'}),
             #'story_new': forms.TextInput(attrs={'class': 'form-control'}),
@@ -233,6 +228,17 @@ class AddCategory(forms.ModelForm):
     class Meta:
         model = Genre
         fields = ['name', 'slug']
+        def clean_name(self):
+            name = self.cleaned_data.get('name')
+            if not name:
+                raise forms.ValidationError("Tên không được để trống")
+            return name
+    
+        def clean_slug(self):
+            slug = self.cleaned_data.get('slug')
+            if not slug:
+                raise forms.ValidationError("Slug không được để trống")
+            return slug
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'slug': forms.TextInput(attrs={'class': 'form-control'})
