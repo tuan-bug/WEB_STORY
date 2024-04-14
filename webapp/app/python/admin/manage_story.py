@@ -25,13 +25,13 @@ def addStory(request):
     form = StoryForm()
     errors = None  # Khởi tạo biến errors ở đây
     if request.method == 'POST':
-        images = request.FILES.getlist('listImages')
+        images = request.FILES.get('image')
         form = StoryForm(request.POST, request.FILES)
         if form.is_valid():
             categories = request.POST.getlist('categories')
             instance = form.save()  # Lưu thông tin model vào cơ sở dữ liệu
             messages.success(request, 'Thêm truyện thành công')
-            return JsonResponse({'success': "Thêm danh mục thành công"})
+            return JsonResponse({'success': True})
         else:
            errors = form.errors  # Lấy ra lỗi của trường 'name'
            return JsonResponse({'success': False, 'errors': errors}, status=400)

@@ -7,7 +7,7 @@
                 <h2 class="modal-title fs-3" id="exampleModalLabel">Thêm truyện mới</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="{% url 'addStory' %}" enctype="multipart/form-data">
+            <form id="add-sroty-form" method="POST" action="{% url 'addStory' %}" enctype="multipart/form-data">
                 <div class="modal-body">
                     {% csrf_token %}
                     <div class="row">
@@ -168,5 +168,70 @@
             }
         });
         
+    });
+</script>
+
+
+<script>
+    $('#saveStoryBtn').click(function(e) {
+        e.preventDefault(); // Ngăn chặn hành vi mặc định của nút submit
+        console.log("Hiiii 4444");
+        var form = $('#add-sroty-form')[0];
+        var formData = new FormData(form);
+        var otherValue = $('#id_image')[0].files[0];
+        console.log('otherValue', otherValue)
+        // Thêm các giá trị khác vào FormData nếu cần thiết
+        formData.append('image', otherValue);
+
+        // Collect selected categories
+
+
+        $.ajax({
+            url: $('#add-sroty-form').attr('action'),
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log("Hiiii 111: ", response);
+                if (!response.success) {
+                    if (response.errors) {
+                        if (response.errors.name) {
+                            $('#errorNameStory').text("Tên không được để trống");
+                        }
+                        if (response.errors.slug) {
+                            $('#errorSlugStory').text("Đường dẫn không được để trống");
+                        }
+                        if (response.errors.author) {
+                            $('#errorAuthorStory').text("Tác giả không được để trống");
+                        }
+                        if (response.errors.category) {
+                            $('#errorCategoryStory').text("Danh mục không được để trống");
+                        }
+                    }
+                } else {
+                    $('#exampleModalAddStory').modal('hide');
+                    window.location.reload();
+                }
+
+            },
+            error: function(xhr, status, error) {
+                var listError = JSON.parse(xhr.responseText); // Phân tích chuỗi JSON
+                console.log("Lỗi LOLLL: ", listError);
+                if (listError.errors.name) {
+                    $('#errorNameStory').text("Tên không được để trống");
+                }
+                if (listError.errors.slug) {
+                    $('#errorSlugStory').text("Đường dẫn không được để trống");
+                }
+                if (listError.errors.author) {
+                    $('#errorAuthorStory').text("Tác giả không được để trống");
+                }
+                if (listError.errors.category) {
+                    $('#errorCategoryStory').text("Danh mục không được để trống");
+                }
+            }
+        });
+        return false; // Ngăn chặn mặc định chuyển hướng trang sau khi xử lý lỗi AJAX
     });
 </script>

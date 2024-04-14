@@ -79,10 +79,9 @@
                     <table style="max-width: 800px" class="table ">
                         <thead>
                             <tr>
-                                <th>Số chap</th>
-                                
-                                <th>Sắp xếp</th>
-                                
+                                <th>Chap</th>
+                                <th>Số lượt xem</th>
+                                <th>Ngày</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -93,6 +92,7 @@
                                         
                                     </td> {% endcomment %}
                                     <td>{{ chapter.name }}</td>
+                                    <td>{{ chapter.view }}</td>
                                     <td>{{ chapter.date }}</td>
                                 </tr>
                             {% endfor %}

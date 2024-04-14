@@ -1,17 +1,23 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 
 from app.models import *
 
 
+from django.shortcuts import redirect
+
 def detail(request):
     user_not_login = "none" if request.user.is_authenticated else "show"
     user_login = "show" if request.user.is_authenticated else "none"
+    formComment = FormComment()
 
     slug = request.GET.get('slug', '') # lấy slug khi người dùng vlick vào truyện nào đó
     story = Story.objects.get(slug=slug)
     categories_story = story.category.values_list('slug', flat=True)
-    category_names = Genre.objects.filter(id__in=categories_story).values_list('name', flat=True)
+    categories = story.category.all()
+    print(story)
     print(story.category)
+    listComment = Comment.objects.filter(story=story)
+
     chapters = Chapter.objects.filter(story=story)
     if chapters.exists():
         first_chapter = chapters.first()
@@ -28,6 +34,18 @@ def detail(request):
     follow = ''
     if request.user.is_authenticated:
         follow = Follow.objects.filter(user=request.user, story=story)
+
+    if request.method == 'POST':
+        form = FormComment(request.POST, request.FILES)
+        if form.is_valid():
+            content = form.cleaned_data['title']
+            comments = Comment(user=request.user, story=story, title=content)
+            comments.save()
+        return redirect(request.META.get('HTTP_REFERER', '/'))  # Chuyển hướng về trang chi tiết của câu chuyện
+    story.count_comment = listComment.count()
+    story.save()
+    print(listComment)
+
     context = {
         'user_not_login': user_not_login,
         'user_login': user_login,
@@ -37,8 +55,12 @@ def detail(request):
         'first_chapter': first_chapter,
         'last_chapter': last_chapter,
         'follow': follow,
+        'formComment': formComment,
+        'listComment': listComment,
+        'categories': categories,
     }
     return render(request, 'app/detail.html', context)
+
 
 
 def detail_chapter(request, chapter_slug):
@@ -53,16 +75,13 @@ def detail_chapter(request, chapter_slug):
     print('TÌm thấy id')
     print(id)
     chapter = get_object_or_404(Chapter, id=id)
-
+    chapter.view = chapter.view + 1
+    chapter.save()
     prev_chapter = chapters.filter(id__lt=chapter.id).last()
     next_chapter = chapters.filter(id__gt=chapter.id).first()
 
     print(chapter.name)
 
-    # print('Chap trước')
-    # print(prev_chapter.name)
-    # print('Chap sau')
-    # print(next_chapter.name)
     images = ImagesChapter.objects.filter(chap=chapter)
     print(chapter)
     context = {

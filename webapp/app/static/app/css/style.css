@@ -1707,7 +1707,7 @@ ol {
 -----------------------*/
 
 .product-details {
-	padding-top: 80px;
+	padding-top: 20px;
 }
 
 .product__details__pic__item {
@@ -2989,6 +2989,10 @@ ol {
 /* Tablet Device = 768px */
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+	.product {
+	padding-top: 80px;
+	padding-bottom: 80px;
+}
 	.section-title {
 		margin-top: 20px;
 	}
@@ -3490,6 +3494,10 @@ ol {
 /* Small Device = 320px */
 
 @media only screen and (max-width: 479px) {
+	.product {
+     padding-top: 80px;
+    padding-bottom: 80px;
+	}
 	.product__details__text .primary-btn {
 		padding: 9px;
 		font-size: 15px;
@@ -3505,6 +3513,9 @@ ol {
         width: 50%;
     }
 	.oranges {
+		width: 50%;
+	}
+	.fix-with-a {
 		width: 50%;
 	}
 	.site-btn {

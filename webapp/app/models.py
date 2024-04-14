@@ -7,7 +7,7 @@ from django.utils import timezone
 from rest_framework import serializers
 from ckeditor.fields import RichTextField
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 from django.utils.text import slugify
 from django.core.validators import MinLengthValidator, ValidationError
@@ -84,6 +84,7 @@ class Story(models.Model):
         self.view = total_views
         self.save()
 
+
 class Chapter(models.Model):
     story = models.ForeignKey(Story, on_delete=models.CASCADE, related_name='chapters')
     image = models.ImageField(null=True, blank=True)
@@ -98,6 +99,11 @@ class Chapter(models.Model):
         return url
     def __str__(self):
         return self.story.name + ' - ' + str(self.name)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # Sau khi một chương được lưu, cập nhật tổng số lượt xem của câu chuyện liên quan
+        self.story.update_total_views()
 
 class Follow(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -123,13 +129,12 @@ class ImagesChapter(models.Model):
         return self.chap.story.name
 
 class Comment(models.Model):
-    user = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     story = models.ForeignKey(Story, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.TextField(null=True, blank=False)
     date = models.DateTimeField(default=timezone.now, blank=True, null=True)
-    def __str__(self):
-        return self.story
-
+    # def __str__(self):
+    #     return self.story
 class ViewHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     story_id = models.IntegerField()
@@ -243,3 +248,14 @@ class AddCategory(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'slug': forms.TextInput(attrs={'class': 'form-control'})
         }
+
+class FormComment(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['title']
+        widgets = {
+            'title': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+
+        }
+    def __str__(self):
+        return self.story

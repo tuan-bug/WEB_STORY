@@ -7,7 +7,7 @@
     <section class="product spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-md-5">
+                <div class="col-lg-3">
                     <div class="sidebar">
                         <div class="sidebar__item">
                         <h4> Thể loại</h4>
@@ -16,23 +16,17 @@
                                     <a href="{% url 'category' %}">Tất cả</a>
                                 </div>
                                 {% for category in categories %}
-                                    <div class="col-md-6">
+                                    <div class="col-lg-6 col-md-4 col-sm-6 mix oranges fresh-meat pr-0 mt-1">
                                         <a href="{% url 'stories_by_category' category.id %}">{{ category}}</a>
                                     </div>
                                 {% endfor %}
                             </div>
-{#                            <h4> Thể loại</h4>#}
-{#                            <ul>#}
-{#                                <li></li>#}
-{#                                {% for category in categories %}#}
-{#                                	<li><a href="{% url 'stories_by_category' category.id %}">{{ category}}</a></li>#}
-{#                                {% endfor %}#}
-{#                            </ul>#}
+
                         </div>
                     </div>
                 </div>
             
-                <div class="col-lg-9 col-md-7">
+                <div class="col-lg-9 col-md-12">
                     <div class="filter__item">
                         <div class="row">
                             <div class="col-lg-3 col-md-5">
@@ -40,41 +34,11 @@
                                     <span>Sắp xếp</span>
                                 </div>
                             </div>
-{#                            <div class="col-lg-9 col-md-4 d-flex">#}
-{#                                <div class="row">#}
-{#                                    <div class="col-lg-3">#}
-{#                                        <button class="btn btn-outline-info mt-1 w-100 ">Theo tháng</button>#}
-{#                                    </div>#}
-{#                                    <div class="col-lg-3">#}
-{#                                        <button class="btn btn-outline-info mt-1 w-100">Theo tháng</button>#}
-{#                                    </div>#}
-{#                                    <div class="col-lg-3">#}
-{#                                        <button class="btn btn-outline-info mt-1 w-100">Theo tháng</button>#}
-{#                                    </div>#}
-{#                                    <div class="col-lg-3">#}
-{#                                        <button class="btn btn-outline-info mt-1 w-100">Theo tháng</button>#}
-{#                                    </div>#}
-{#                                    <div class="col-lg-3">#}
-{#                                        <button class="btn btn-outline-info mt-1 w-100">Theo tháng</button>#}
-{#                                    </div>#}
-{#                                    <div class="col-lg-3">#}
-{#                                        <button class="btn btn-outline-info mt-1 w-100">Theo tháng</button>#}
-{#                                    </div>#}
-{#                                    <div class="col-lg-3">#}
-{#                                        <button class="btn btn-outline-info mt-1 w-100">Theo tháng</button>#}
-{#                                    </div>#}
-{#                                    <div class="col-lg-3">#}
-{#                                        <button class="btn btn-outline-info mt-1 w-100">Theo tháng</button>#}
-{#                                    </div>#}
-{#                                    #}
-{#                                </div>#}
-{#                            </div>#}
-
                         </div>
                     </div>
                     <div class="row">
                         {% for story in stories %}
-                        	<div class="col-lg-3 col-md-4 col-sm-6">
+                        	<div class="col-md-3 col-sm-4 col-6 mix oranges fresh-meat">
                                 <div class="product__item">
                                     <div class="product__item__pic set-bg" data-setbg="{{story.ImageURL}}">
                                     </div>

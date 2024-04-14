@@ -12,16 +12,22 @@
                         <h4>BXH HÔM NAY</h4>
                     </div>
                 </div>
-                <div class="col-lg-9 col-md-4 d-flex justify-content-end">
-                    <a  class="btn btn-outline-info mr-1">Theo ngày</a>
-                    <a href="{% url 'ratting_date' %}" class="btn btn-outline-info mr-1">Theo tuần</a>
-                    <a href="{% url 'ratting_month' %}" class="btn btn-outline-info mr-1">Theo tháng</a>
-                    <a href="{% url 'ratting_year' %}" class="btn btn-outline-info mr-1">Theo năm</a>
+                <div class="col-lg-9 d-flex justify-content-end">
+                    <div class="row">
+{#                        <div class="col-3"><a  class="btn btn-outline-info mr-1">Theo ngày</a></div>#}
+{#                        <div class="col-3"><a href="{% url 'ratting_date' %}" class="btn btn-outline-info mr-1">Theo tuần</a></div>#}
+{#                        <div class="col-3"><a href="{% url 'ratting_month' %}" class="btn btn-outline-info mr-1">Theo tháng</a></div>#}
+{#                        <div class="col-3"><a href="{% url 'ratting_year' %}" class="btn btn-outline-info mr-1">Theo năm</a></div>#}
+                        <a  class="btn btn-outline-info mr-1">Theo ngày</a>
+                        <a href="{% url 'ratting_date' %}" class="btn btn-outline-info mr-1">Theo tuần</a>
+                        <a href="{% url 'ratting_month' %}" class="btn btn-outline-info mr-1">Theo tháng</a>
+                        <a href="{% url 'ratting_year' %}" class="btn btn-outline-info mr-1">Theo năm</a>
+                    </div>
                 </div>
             </div>
             <div class="row mt-4">
                 {% for story in stories %}
-                    <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-6 mix oranges fix-with-a fresh-meat">
                         <div class="product__item">
                             <div class="product__item__pic set-bg" data-setbg="{{story.ImageURL}}">
                             </div>
