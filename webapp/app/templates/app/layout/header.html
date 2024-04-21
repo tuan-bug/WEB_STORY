@@ -2,7 +2,7 @@
 
 <div class="humberger__menu__wrapper">
         <div class="humberger__menu__logo">
-            <a href="#"><img src="{% static 'app/images/logo111.png' %}" alt=""></a>
+            <a href="#"><img src="{% static 'app/images/TunManga.png' %}" alt=""></a>
         </div>
         <div class="header__top__right__auth dropdown " style="display: {{ user_login }}">
             <a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  href="{% url 'login' %} " ><i class="fa fa-user"></i>Xin chào {{request.user}}</a>
@@ -38,10 +38,7 @@
             <a href="#"><i class="fa fa-pinterest-p"></i></a>
         </div>
         <div class="humberger__menu__contact">
-            <ul>
-                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
-                <li>Free Shipping for all Order of $99</li>
-            </ul>
+            
         </div>
     </div>
     <!-- Humberger End -->
@@ -52,7 +49,7 @@
                 
                 <div style="height: 100%" class="col-lg-3">
                     <div class="header__logo">
-                        <a href="{% url 'home' %}"><img style="height: 40px;" src="https://cdn.popsww.com/popsapp/assets/images/icons/logo-pops.png?format=webp" alt=""></a>
+                        <a href="{% url 'home' %}"><img style="height: 70px;" src="{% static 'app/images/TunManga.png' %}" alt=""></a>
                     </div>
                 </div>
                 <div style="height: 100%" class="col-lg-7 mt-4">
@@ -69,7 +66,11 @@
                 </div>
                 <div style="height: 100%" class="col-lg-2 hidden-mobile d-flex justify-content-center align-items-center">
                     <div class="header__top__right__auth dropdown " style="display: {{ user_login }}">
-                        <a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  href="{% url 'login' %} " ><i class="fa fa-user"></i>Xin chào {{request.user}}</a>
+                        
+                        <a class="dropdown-toggle mt-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  href="{% url 'login' %} " >
+                            <img style="width: 50px; height: 50px; border-radius: 50%;border: 1px solid #0F75BC;  " src="https://th.bing.com/th/id/OIP.kZTP9p8fsKVEfXx5m8gV_AHaHa?w=182&h=182&c=7&r=0&o=5&pid=1.7" alt="">
+                            <span style="font-size: 16px;" class="ml-2">{{request.user}}</span>
+                        </a>
                         <!-- Dropdown Menu -->
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="{% url 'information' %}">Thông tin</a>

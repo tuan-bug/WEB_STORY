@@ -2,11 +2,146 @@
 {% load static %}
 {% block blog-product %}
     {% include 'admin/layout/message.html' %}
-    <div class="p-4">
-        <h2 class="text-center">QUẢN LÝ TRUYỆN</h2>
+    <div class="mt-4">
+        <div class="card shadow mb-4 ml-2">
+            <div class="card-body pr-4 pl-4">
+                <div style="border-bottom: 1px solid #e3e6f0" class="row">
+                    <div style="border-bottom: 1px solid #e3e6f0" class="col-12">
+                        <h3>DANH SÁCH TRUYỆN</h3>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Tên danh mục</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1"
+                                   placeholder="Nhập tên danh mục">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Tên truyện</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1"
+                                   placeholder="Nhập tên truyện">
+                        </div>
+                    </div>
+                    <div class="col-3">
+
+                    </div>
+                    <div class="col-3 d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                    </div>
+                </div>
+                <div class="text-left mb-3 mt-3">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#exampleModalAddStory">
+                        <i class="fa fa-plus-circle" style="font-size:20px"></i>
+                        Thêm mới
+                    </button>
+                </div>
+                <div class="table-responsive mt-4">
+                    <table style="border: 1px solid #e3e6f0" class="table" id="dataTable" width="100%"
+                           cellspacing="0">
+                        <thead>
+                        <tr style="padding-bottom: 25px;" class="text-center">
+                            <th style="border: 1px solid #e3e6f0">STT</th>
+                            <th style="border: 1px solid #e3e6f0">Ảnh</th>
+                            <th style="border: 1px solid #e3e6f0">Thông Tin</th>
+                            <th style="border: 1px solid #e3e6f0">Trạng Thái</th>
+                            <th style="border: 1px solid #e3e6f0">Thao Tác</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for story in storys %}
+                            <tr>
+                                <td style="border: 1px solid #e3e6f0" class="shoping__cart__price text-center">
+                                    {{ story.id }}
+                                </td>
+                                <td class="text-center" style="border: 1px solid #e3e6f0">
+                                    <img style="height: 120px" src="{{ story.ImageURL }}" alt="">
+                                </td>
+                                <td style="border: 1px solid #e3e6f0">
+                                    <ul class="list-unstyled ml-3">
+                                        <li><b>Tên: </b> {{ story.name }}</li>
+                                        <li><b>Tác giả: </b> {{ story.author }} </li>
+                                        <li><b>Thể loại: </b> {{ story.author }} </li>
+                                        <li><b>View: </b> {{ story.view }}</li>
+                                    </ul>
+                                </td>
+                                <td class="text-center" style="border: 1px solid #e3e6f0">Đang tiến hành</td>
+                                <td class="text-center" style="border: 1px solid #e3e6f0">
+                                    <a style="" href="{% url 'viewStory' %}?id={{ story.id }}"
+                                       class="btn btn-info btn-circle mr-2">
+                                        <i class="fa fa-eye" style="font-size:20px;"  ></i>
+                                    </a>
+                                    <a href="{% url 'editStory' %}?id={{ story.id }}"
+                                       class="btn btn-warning btn-circle mr-2">
+                                        <i class="fa fa-pencil" style="font-size: 20px"></i>
+                                    </a>
+                                    <a href="" data-product-id="{{ story.id }}"
+                                       data-product-name="{{ story.name }}"
+                                       class="btn btn-danger btn-circle"
+                                       data-toggle="modal" data-target="#deleteStoryModal_{{ story.id }}">
+                                        <i class="fa fa-trash-o" style="font-size: 20px "></i>
+                                    </a>
+                                    <div class="modal" id="deleteStoryModal_{{ story.id }}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Xóa Truyện </h5>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Bạn có chắc chắn muốn xóa truyên này không <span
+                                                            id="story-name"></span>?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Hủy
+                                                    </button>
+                                                    <a href="{% url 'deleteStory' story.id %}" type="button"
+                                                       class="delete-story btn btn-danger">Xác nhận</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if categories.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1">&laquo; Đầu</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ categories.previous_page_number }}">Trước</a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item disabled">
+                            <span class="page-link">Trang {{ categories.number }}</span>
+                        </li>
+
+                        {% if categories.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ categories.next_page_number }}">Tiếp</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ categories.paginator.num_pages }}">Cuối &raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
         <div class="container-fluid">
             <div class="text-right mb-3">
-                <button class="btn btn-primary btn-icon-split p-2" data-bs-toggle="modal" data-bs-target="#exampleModalAddStory" >Thêm truyện</button>
+                <button class="btn btn-primary btn-icon-split p-2" data-bs-toggle="modal"
+                        data-bs-target="#exampleModalAddStory">Thêm truyện
+                </button>
             </div>
             {% include 'admin/story/addStory.html' %}
 
@@ -15,65 +150,83 @@
                     <div class="">
                         <table class="table " id="dataTable" width="100%" cellspacing="0">
                             <thead>
-                                <tr style="padding-bottom: 25px;">
-                                    <th>ID</th>
-                                    <th>Ảnh</th>
-                                    <th>Thông tin chi tiết</th>
-                                    <th>Thao Tác</th>
-                                </tr>
+                            <tr style="padding-bottom: 25px;">
+                                <th>ID</th>
+                                <th>Ảnh</th>
+                                <th>Thông tin chi tiết</th>
+                                <th>Thao Tác</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                {% for story in storys %}
-                                    <tr>
-                                        <td class="shoping__cart__price">
-                                            {{ story.id }}
-                                        </td>
-                                        <td>
-                                            <img style="height: 120px" src="{{ story.ImageURL }}" alt="">
-                                        </td>
-                                        <td>
-                                            <ul class="list-unstyled">
-                                                <li><b>Tên: </b> {{ story.name }}</li>
-                                                <li><b>Tác giả: </b> {{ story.author }} </li>
-                                                <li><b>Thể loại: </b> {{ story.author }} </li>
-                                                <li><b>View: </b> {{ story.view }}</li>
-                                                <li><b>Số lượng bình luận: </b> {{ story.count_comment }}</li>
-                                                <li><b>Số lượt like: </b> {{ story.likes }}</li>
-                                            </ul>
-                                        </td>
-                                        <td>
-                                            <a style="" href="{% url 'viewStory' %}?id={{ story.id }}" class="btn btn-info btn-circle mr-2">
-                                                <img src="{% static 'admin/icons/view.png' %}" alt="">
-                                            </a>
-                                            <a href="{% url 'editStory' %}?id={{ story.id }}" class="btn btn-warning btn-circle mr-2">
-                                                <img src="{% static 'admin/icons/pen (1).png' %}" alt="">
-                                            </a>
-                                            <a href="" data-product-id="{{ story.id }}"
-                                                data-product-name="{{ story.name }}"
-                                                class="btn btn-danger btn-circle"
-                                                data-toggle="modal" data-target="#deleteStoryModal_{{ story.id }}">
-                                                <img src="{% static 'admin/icons/trash (1).png' %}" alt="">
-                                            </a>
-                                            <div class="modal" id="deleteStoryModal_{{ story.id }}">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Xóa Truyện </h5>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p>Bạn có chắc chắn muốn xóa truyên này không <span id="story-name"></span>?</p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                                            <a href="{% url 'deleteStory' story.id %}" type="button" class="delete-story btn btn-danger">Xác nhận</a>
-                                                        </div>
+                            {% for story in storys %}
+                                <tr>
+                                    <td class="shoping__cart__price">
+                                        {{ story.id }}
+                                    </td>
+                                    <td>
+                                        <img style="height: 120px" src="{{ story.ImageURL }}" alt="">
+                                    </td>
+                                    <td>
+                                        <ul class="list-unstyled">
+                                            <li><b>Tên: </b> {{ story.name }}</li>
+                                            <li><b>Tác giả: </b> {{ story.author }} </li>
+                                            <li><b>Thể loại: </b> {{ story.author }} </li>
+                                            <li><b>View: </b> {{ story.view }}</li>
+                                            <li><b>Số lượng bình luận: </b> {{ story.count_comment }}</li>
+                                            <li><b>Số lượt like: </b> {{ story.likes }}</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul class="list-unstyled">
+                                            <li><b>Tên: </b> {{ story.name }}</li>
+                                            <li><b>Tác giả: </b> {{ story.author }} </li>
+                                            <li><b>Thể loại: </b> {{ story.author }} </li>
+                                            <li><b>View: </b> {{ story.view }}</li>
+                                            <li><b>Số lượng bình luận: </b> {{ story.count_comment }}</li>
+                                            <li><b>Số lượt like: </b> {{ story.likes }}</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <a style="" href="{% url 'viewStory' %}?id={{ story.id }}"
+                                           class="btn btn-info btn-circle mr-2">
+                                            <img src="{% static 'admin/icons/view.png' %}" alt="">
+                                        </a>
+                                        <a href="{% url 'editStory' %}?id={{ story.id }}"
+                                           class="btn btn-warning btn-circle mr-2">
+                                            <img src="{% static 'admin/icons/pen (1).png' %}" alt="">
+                                        </a>
+                                        <a href="" data-product-id="{{ story.id }}"
+                                           data-product-name="{{ story.name }}"
+                                           class="btn btn-danger btn-circle"
+                                           data-toggle="modal" data-target="#deleteStoryModal_{{ story.id }}">
+                                            <img src="{% static 'admin/icons/trash (1).png' %}" alt="">
+                                        </a>
+                                        <div class="modal" id="deleteStoryModal_{{ story.id }}">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Xóa Truyện </h5>
+                                                        <button type="button" class="close" data-dismiss="modal">
+                                                            &times;
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Bạn có chắc chắn muốn xóa truyên này không <span
+                                                                id="story-name"></span>?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Hủy
+                                                        </button>
+                                                        <a href="{% url 'deleteStory' story.id %}" type="button"
+                                                           class="delete-story btn btn-danger">Xác nhận</a>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -112,20 +265,20 @@
 
 
     <script>
-        $('#saveStoryBtn').click(function(e) {
+        $('#saveStoryBtn').click(function (e) {
             e.preventDefault(); // Ngăn chặn hành vi mặc định của nút submit
             console.log("Hiiii 4444");
             var form = $('#exampleModalAddStory form');
             var categories = [];
-        
+
             // Collect selected categories
-            
-        
+
+
             $.ajax({
                 type: 'POST',
                 url: form.attr('action'),
                 data: form.serialize(),
-                success: function(response) {
+                success: function (response) {
                     console.log("Hiiii 111: ", response);
                     if (!response.success) {
                         if (response.errors) {
@@ -147,7 +300,7 @@
                         window.location.reload();
                     }
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     // Xử lý lỗi AJAX
                     var listError = JSON.parse(xhr.responseText); // Phân tích chuỗi JSON
                     console.log("Lỗi LOLLL: ", listError);
@@ -167,8 +320,7 @@
             });
             return false; // Ngăn chặn mặc định chuyển hướng trang sau khi xử lý lỗi AJAX
         });
-        
-        
-        
+
+
     </script>
 {% endblock blog-product %}

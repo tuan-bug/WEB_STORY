@@ -1,187 +1,259 @@
-
 {% extends 'app/base.html' %}
 {% load static %}
 {% block category_context %}
     {% include 'app/layout/message.html' %}
     <section class="product-details spad">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-4">
-                    <div class="product__details__pic">
-                        <div class="product__details__pic__item">
-                            <img style="width: 100%" class="product__details__pic__item--large"
-                                src="{{story.ImageURL}}" alt="">
-                        </div>
+            <div class="row media-mt">
+                <div class="col-lg-9">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4">
+                            <div class="product__details__pic">
+                                <div class="product__details__pic__item">
+                                    <img style="width: 100%" class="product__details__pic__item--large"
+                                         src="{{ story.ImageURL }}" alt="">
+                                </div>
 
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-md-8">
+                            <div class="product__details__text">
+                                <h3>{{ story.name }}</h3>
+                                <div class="product__details__rating">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star-half-o"></i>
+                                    <span>(18 đánh giá)</span>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="product__details__rating p-3">
+                                        <i class="fa-regular fa-eye"></i>
+                                        {{ story.view }} view
+                                    </div>
+                                    <div class="product__details__rating p-3">
+                                        <i class="fa-solid fa-thumbs-up"></i>
+                                        {{ story.likes }} like
+                                    </div>
+                                    <div class="product__details__rating p-3">
+                                        <i class="fa-regular fa-comment"></i>
+                                        {{ story.count_comment }} comment
+                                    </div>
+                                </div>
+
+                                <div class="product__details__text mb-2">Trạng thái:
+                                    {% if products.count > 0 %}
+                                        Đang tiến hành
+                                    {% else %}
+                                        Kết thúc
+                                    {% endif %}
+                                </div>
+                                <div class="product__details__text mb-2"><b>Tác giả:</b> {{ story.author }} </div>
+                                <div class="product__details__text mb-2"><b>Tình trạng: </b>
+                                    {% if story.status == "ongoing" %}
+                                        Đang tiến hành
+                                    {% elif  story.status == "completed" %}
+                                        Đã hoàn thành
+                                    {% else %}
+                                        Bị Drop
+                                    {% endif %}
+                                </div>
+                                <div class="product__details__text mb-2"><b> Thể loại: </b>
+                                    {% for category in categories %}
+                                        {{ category.name }}
+                                        {% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class="product__details__text mb-2"><b> Xếp hạng: </b> xxx</div>
+
+                                <div class="d-flex ">
+                                    {% if first_chapter.id %}
+                                        <a style="color: white;" class="primary-btn btn-sm border-0"
+                                           href="{% url 'chapter_detail' chapter_slug=slug %}?chap={{ first_chapter.id }}">Đọc
+                                            ngay</a>
+                                    {% else %}
+                                        <button type="button" class="primary-btn btn-sm border-0" data-toggle="modal"
+                                                data-target="#myModal">
+                                            ĐỌC NGAY
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                                             aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="myModalLabel">Thông báo</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Truyện chưa có chap.
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Đóng
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if last_chapter.id %}
+                                        <a style="color: white;" class="primary-btn btn-sm border-0 "
+                                           href="{% url 'chapter_detail' chapter_slug=slug %}?chap={{ last_chapter.id }}">Chap
+                                            mới nhất</a>
+                                        <!-- Trong một template Django (ví dụ: story_detail.html) -->
+                                    {% else %}
+                                        <button type="button" class="primary-btn btn-sm border-0" data-toggle="modal"
+                                                data-target="#myModal1">
+                                            chap mới nhất
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog"
+                                             aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="myModalLabel">Thông báo</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Truyện chưa có chap.
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Đóng
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if user.is_authenticated %}
+                                        {% if follow.exists %}
+                                            <!-- Hiển thị nút bỏ theo dõi nếu người dùng đã theo dõi truyện -->
+                                            <form action="{% url 'unfollow_story' story.id %}" method="post">
+                                                {% csrf_token %}
+                                                <button class="primary-btn btn-sm border-0" type="submit">Bỏ theo dõi
+                                                </button>
+                                            </form>
+                                        {% else %}
+                                            <!-- Hiển thị nút theo dõi nếu người dùng chưa theo dõi truyện -->
+                                            {#                                <button data-action = "follow" data-id = "{{ story.id }}" class="primary-btn btn-sm border-0 follow-btn" type="submit">Theo dõi</button>#}
+                                            <form action="{% url 'follow_story' story.id %}" method="post">
+                                                {% csrf_token %}
+                                                <button class="primary-btn btn-sm border-0" type="submit">Theo dõi
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    {% else %}
+
+                                        <button class="primary-btn btn-sm border-0" data-bs-toggle="modal"
+                                                data-bs-target="#exampleModalFollow">Theo dõi
+                                        </button>
+
+                                        <div class="modal fade" id="exampleModalFollow" tabindex="-1"
+                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="fs-5">Popover in a modal</h5>
+                                                        <button type="button" class="close" data-bs-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Bạn cần đăng nhập để thực hiện chức năng theo dõi. Bạn có muốn
+                                                        đăng nhập không ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Hủy
+                                                        </button>
+                                                        <a href="{% url 'login' %}" class="btn btn-primary">Đồng ý</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="product__details__text">
+                                <div class="product__details__text mb-2 text-justify"><b>Mô
+                                    tả: </b>{{ story.description }} </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-8 col-md-8">
-                    <div class="product__details__text">
-                        <h3>{{story.name}}</h3>
-                        <div class="product__details__rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                            <span>(18 đánh giá)</span>
-                        </div>
-                    <div class="d-flex">
-                        <div class="product__details__rating p-3">
-                            <i class="fa-regular fa-eye"></i>
-                            {{ story.view}} view
-                        </div>
-                        <div class="product__details__rating p-3">
-                            <i class="fa-solid fa-thumbs-up"></i>
-                            {{ story.likes }} like
-                        </div>
-                        <div class="product__details__rating p-3">
-                            <i class="fa-regular fa-comment"></i>
-                            {{ story.count_comment }} comment
-                        </div>
-                    </div>
 
-                        <div class="product__details__text mb-2">Trạng thái:
-                            {% if products.count > 0 %}
-                                Còn hàng
-                            {% else %}
-                                Hết hàng
-                            {% endif %}
-                        </div>
-                        <div class="product__details__text mb-2"> <b>Tác giả:</b> {{ story.author }} </div>
-                        <div class="product__details__text mb-2"> <b>Tình trạng: </b>
-                            {% if story.status == "ongoing" %}
-                                Đang tiến hành
-                            {% elif  story.status == "completed" %}
-                                Đã hoàn thành
-                            {% else %}
-                                Bị Drop
-                            {% endif %}
-                        </div>
-                        <div class="product__details__text mb-2"> <b> Thể loại: </b>
-                            {% for category in categories %}
-                            	{{ category.name }}
-                                {% if not forloop.last %}, {% endif %}
+                <div class="col-lg-3">
+                    <h4>Truyện đề xuất</h4>
+                        <div class="latest-prdouct__slider__item mt-2">
+                            {% for story in lstStory %}
+                                <a href="#" class="latest-product__item">
+                                    <div class="latest-product__item__pic">
+                                        <img src="{{ story.ImageURL }}" alt="">
+                                    </div>
+                                    <div class="latest-product__item__text">
+                                        <h6>{{ story.name }}</h6>
+
+                                    </div>
+                                </a>
                             {% endfor %}
                         </div>
-                        <div class="product__details__text mb-2"> <b> Xếp hạng: </b> xxx </div>
-                    
-                    <div class="d-flex ">
-                        {% if first_chapter.id %}
-                            <a style="color: white;" class="primary-btn btn-sm border-0" href="{% url 'chapter_detail' chapter_slug=slug %}?chap={{ first_chapter.id }}">Đọc ngay</a>
-                        {% else %}
-                            <button type="button" class="primary-btn btn-sm border-0" data-toggle="modal" data-target="#myModal">
-                              ĐỌC NGAY
-                            </button>
-                            <!-- Modal -->
-                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="myModalLabel">Thông báo</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Truyện chưa có chap.
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    
-                        {% if last_chapter.id %}
-                            <a style="color: white;" class="primary-btn btn-sm border-0 " href="{% url 'chapter_detail' chapter_slug=slug %}?chap={{ last_chapter.id }}">Chap mới nhất</a>
-                        <!-- Trong một template Django (ví dụ: story_detail.html) -->
-                        {% else %}
-                            <button type="button" class="primary-btn btn-sm border-0" data-toggle="modal" data-target="#myModal1">
-                              chap mới nhất
-                            </button>
-                            <!-- Modal -->
-                            <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="myModalLabel">Thông báo</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Truyện chưa có chap.
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    
-                        {% if user.is_authenticated %}
-                            {% if follow.exists %}
-                                <!-- Hiển thị nút bỏ theo dõi nếu người dùng đã theo dõi truyện -->
-                                <form action="{% url 'unfollow_story' story.id %}" method="post">
-                                    {% csrf_token %}
-                                    <button class="primary-btn btn-sm border-0" type="submit">Bỏ theo dõi</button>
-                                </form>
-                            {% else %}
-                                <!-- Hiển thị nút theo dõi nếu người dùng chưa theo dõi truyện -->
-{#                                <button data-action = "follow" data-id = "{{ story.id }}" class="primary-btn btn-sm border-0 follow-btn" type="submit">Theo dõi</button>#}
-                                <form action="{% url 'follow_story' story.id %}" method="post">
-                                    {% csrf_token %}
-                                    <button class="primary-btn btn-sm border-0" type="submit">Theo dõi</button>
-                                </form>
-                            {% endif %}
-                        {% else %}
-                            
-                            <button class="primary-btn btn-sm border-0" data-bs-toggle="modal" data-bs-target="#exampleModalFollow">Theo dõi</button>
-                            
-                            <div class="modal fade" id="exampleModalFollow" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="fs-5">Popover in a modal</h5>
-                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Bạn cần đăng nhập để thực hiện chức năng theo dõi. Bạn có muốn đăng nhập không ?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                        <a href="{% url 'login' %}" class="btn btn-primary">Đồng ý</a>
-                                    </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
 
-                    </div>
-                </div>
-            
-                <div class="col-lg-12">
-                    <div class="product__details__text">
-                        <div class="product__details__text mb-2 text-justify"> <b>Mô tả: </b>{{ story.description }} </div>
-                    </div>
+{#                    <div class="latest-prdouct__slider__item">#}
+{#                        <a href="#" class="latest-product__item">#}
+{#                            <div class="latest-product__item__pic">#}
+{#                                <img src="" alt="">#}
+{#                            </div>#}
+{#                            <div class="latest-product__item__text">#}
+{#                                <h6>Crab Pool Security</h6>#}
+{##}
+{#                            </div>#}
+{#                        </a>#}
+{#                        <a href="#" class="latest-product__item">#}
+{#                            <div class="latest-product__item__pic">#}
+{#                                <img src="img/latest-product/lp-2.jpg" alt="">#}
+{#                            </div>#}
+{#                            <div class="latest-product__item__text">#}
+{#                                <h6>Crab Pool Security</h6>#}
+{##}
+{#                            </div>#}
+{#                        </a>#}
+{#                        <a href="#" class="latest-product__item">#}
+{#                            <div class="latest-product__item__pic">#}
+{#                                <img src="img/latest-product/lp-3.jpg" alt="">#}
+{#                            </div>#}
+{#                            <div class="latest-product__item__text">#}
+{#                                <h6>Crab Pool Security</h6>#}
+{#                            </div>#}
+{#                        </a>#}
+{#                    </div>#}
                 </div>
                 <div class="col-lg-12">
                     <div class="product__details__tab">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
-                                    aria-selected="true">Chương</a>
+                                   aria-selected="true">Chương ({{ chapters.count }})</a>
                             </li>
 
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
-                                    aria-selected="false">Bình luận <span>({{ listComment.count }})</span></a>
+                                   aria-selected="false">Bình luận <span>({{ listComment.count }})</span></a>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -192,29 +264,30 @@
                                             <div class="shoping__cart__table">
                                                 <table class="mt-2">
                                                     <thead>
-                                                        <tr>
-                                                            <th class="shoping__product">Chương</th>
-                                                            <th class="shoping__product"></th>
-                                                            <th>Lượt xem</th>
-                                                            <th>Cập nhập</th>
-                                                            
-                                                        </tr>
+                                                    <tr>
+                                                        <th class="shoping__product">Chương</th>
+                                                        <th class="shoping__product"></th>
+                                                        <th>Lượt xem</th>
+                                                        <th>Cập nhập</th>
+
+                                                    </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {% for chapter in chapters %}
-                                                            <tr class="chapter-row" data-chapter-id="{{ chapter.id }}" data-chapter-slug="{{ slug }}">
-                                                                <td class="shoping__cart__quantity">
-                                                                    <img src="{{ chapter.ImageURL }}" alt="">
-                                                                </td>
-                                                                <td class="shoping__cart__item font-sm pl-4">
-                                                                    {{ chapter.name }}
-                                                                </td>
-                                                                <td>{{ chapter.view}}</td>
-                                                                <td class="shoping__cart__total font-sm text-center">
-                                                                    {{ chapter.date | date:"d/m/Y" }}
-                                                                </td>
-                                                            </tr>
-                                                        {% endfor %}
+                                                    {% for chapter in chapters %}
+                                                        <tr class="chapter-row" data-chapter-id="{{ chapter.id }}"
+                                                            data-chapter-slug="{{ slug }}">
+                                                            <td class="shoping__cart__quantity">
+                                                                <img src="{{ chapter.ImageURL }}" alt="">
+                                                            </td>
+                                                            <td class="shoping__cart__item font-sm pl-4">
+                                                                {{ chapter.name }}
+                                                            </td>
+                                                            <td>{{ chapter.view }}</td>
+                                                            <td class="shoping__cart__total font-sm text-center">
+                                                                {{ chapter.date | date:"d/m/Y" }}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -228,27 +301,31 @@
                                     <div class="col-lg-12">
                                         <div class="">
                                             <div class="tab-content form-outline w-100">
-                                                <form  method="POST" action="">
+                                                <form method="POST" action="">
                                                     {% csrf_token %}
                                                     {{ formComment.title }}
                                                     <div class="float-end mt-2 pt-1">
-                                                        <button name="comment" type="submit" class="btn primary-btn btn-sm">Bình luận</button>
+                                                        <button name="comment" type="submit"
+                                                                class="btn primary-btn btn-sm">Bình luận
+                                                        </button>
                                                     </div>
                                                 </form>
                                                 <h4 class="pt-3 pb-2">Bình luận</h4>
-                                                    {% for comment in listComment %}
+                                                {% for comment in listComment %}
                                                     <div class="d-flex flex-start mb-4">
                                                         <img class="rounded-circle shadow-1-strong me-3"
-                                                            src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="55"
-                                                            height="55" />
+                                                             src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp"
+                                                             alt="avatar" width="55"
+                                                             height="55"/>
                                                         <div class="ml-3">
-                                                           <span> <span style="font-weight: bold; margin-right: 10px;">{{ comment.user.first_name }}  {{ comment.user.last_name }}</span>{{ comment.date|date:"d/m/Y" }} </span>
+                                                            <span> <span
+                                                                    style="font-weight: bold; margin-right: 10px;">{{ comment.user.first_name }} {{ comment.user.last_name }}</span>{{ comment.date|date:"d/m/Y" }} </span>
 
 
                                                             <p class="mb-0">{{ comment.title }}</p>
                                                         </div>
                                                     </div>
-                                                    {% endfor %}
+                                                {% endfor %}
                                             </div>
                                         </div>
                                     </div>
@@ -261,20 +338,20 @@
         </div>
     </section>
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var chapterRows = document.querySelectorAll('.chapter-row');
+        document.addEventListener('DOMContentLoaded', function () {
+            var chapterRows = document.querySelectorAll('.chapter-row');
 
-        chapterRows.forEach(function (row) {
-            row.addEventListener('click', function () {
-                var chapterId = row.getAttribute('data-chapter-id');
-                var chapterSlug = row.getAttribute('data-chapter-slug');
-                var url = '{% url "chapter_detail" chapter_slug="slug_placeholder" %}?chap=' + chapterId;
-                url = url.replace('slug_placeholder', chapterSlug);
-                window.location.href = url;
+            chapterRows.forEach(function (row) {
+                row.addEventListener('click', function () {
+                    var chapterId = row.getAttribute('data-chapter-id');
+                    var chapterSlug = row.getAttribute('data-chapter-slug');
+                    var url = '{% url "chapter_detail" chapter_slug="slug_placeholder" %}?chap=' + chapterId;
+                    url = url.replace('slug_placeholder', chapterSlug);
+                    window.location.href = url;
+                });
             });
         });
-    });
-</script>
+    </script>
 
 
 {% endblock category_context %}

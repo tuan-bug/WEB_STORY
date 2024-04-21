@@ -21,7 +21,7 @@ from .python.app.contact import contact
 
 # admin
 from .python.admin.manage import Manage
-from .python.admin.home_manage import homeManage
+from .python.admin.home_manage import homeManage, manageHistory
 from .python.admin.manage_slide import manageSlide, addSlide, editSlide, deleteSlide, get_slide
 from .python.admin.updateStatus import update_status
 from .python.admin.manage_user import manageUser, deleteUser, addUser, editUser

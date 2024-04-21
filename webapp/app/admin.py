@@ -10,4 +10,5 @@ admin.site.register(Genre)
 admin.site.register(Customer)
 admin.site.register(ViewHistory)
 admin.site.register(Follow)
+admin.site.register(BrowserStats)
 # Register your models here.

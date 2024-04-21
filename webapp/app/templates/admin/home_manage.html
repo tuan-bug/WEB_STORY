@@ -3,134 +3,240 @@
 
 {% block home_manage %}
     {% include 'admin/layout/message.html' %}
-        <div class="row">
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-6 col-md-6 mb-4 p-3">
-                <div class="card border-left-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Số lượt xem
+    <div style="margin-left: 15px;" class="row">
+        <div class="col-xl-5 col-md-6 mb-4 p-3">
+            <div class="row">
+                <div class="col-xl-6 col-md-6 mb-4 p-3">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        Số lượt xem
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_views }}</div>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_views }}</div>
-                            </div>
-                            <div class="col-auto">
-                                <img class="mr-2" src="{% static 'app/images/icons/calendar.png' %}" alt="">
+                                <div class="col-auto">
+                                    <img class="mr-2" src="{% static 'app/images/icons/calendar.png' %}" alt="">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-6 col-md-6 mb-4 p-3">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Số lượt thích
+                <div class="col-xl-6 col-md-6 mb-4 p-3">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        Số lượt thích
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"> {{ total_likes }}</div>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800"> {{ total_likes }}</div>
-                            </div>
-                            <div class="col-auto">
-                                <img class="mr-2" src="{% static 'app/images/icons/chart.png' %}" alt="">
+                                <div class="col-auto">
+                                    <img class="mr-2" src="{% static 'app/images/icons/chart.png' %}" alt="">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-6 col-md-6 mb-4 p-3">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Thành viên
+                <div class="col-xl-6 col-md-6 mb-4 p-3">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        Thành viên
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">667</div>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
-                            </div>
-                            <div class="col-auto">
-                                <img class="mr-2" src="{% static 'app/images/icons/team.png' %}" alt="">
+                                <div class="col-auto">
+                                    <img class="mr-2" src="{% static 'app/images/icons/team.png' %}" alt="">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Pending Requests Card Example -->
-            <div class="col-xl-6 col-md-6 mb-4 p-3">
-                <div class="card border-left-warning shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    Phản hồi
+                <div class="col-xl-6 col-md-6 mb-4 p-3">
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                        Phản hồi
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">1234</div>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
-                            </div>
-                            <div class="col-auto">
-                                <img class="mr-2" src="{% static 'app/images/icons/feedback.png' %}" alt="">
+                                <div class="col-auto">
+                                    <img class="mr-2" src="{% static 'app/images/icons/feedback.png' %}" alt="">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-{#        <div class="row">#}
-{#            <!-- Area Chart -->#}
-{#            <div class="col-xl-8 col-lg-7">#}
-{##}
-{#                <!-- Area Chart -->#}
-{#                <div class="card shadow mb-4">#}
-{#                    <div class="card-header py-3">#}
-{#                        <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>#}
-{#                    </div>#}
-{#                    <div class="card-body">#}
-{#                        <div class="chart-area">#}
-{#                            <canvas id="myAreaChart"></canvas>#}
-{#                        </div>#}
-{#                        <hr>#}
-{#                        Styling for the area chart can be found in the#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{##}
-{#            <!-- Pie Chart -->#}
-{#            <div class="col-xl-4 col-lg-5">#}
-{#                <div class="card shadow mb-4">#}
-{#                    <!-- Card Header - Dropdown -->#}
-{#                    <div#}
-{#                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">#}
-{#                        <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>#}
-{#                        <div class="dropdown no-arrow">#}
-{#                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"#}
-{#                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-{#                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>#}
-{#                            </a>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <!-- Card Body -->#}
-{#                    <div class="card-body">#}
-{#                        <div class="chart-pie pt-4 pb-2">#}
-{#                            <canvas id="myPieChart"></canvas>#}
-{#                        </div>#}
-{#                        <div class="mt-4 text-center small">#}
-{#                            <span class="mr-2">#}
-{#                                <i class="fas fa-circle text-primary"></i> Direct#}
-{#                            </span>#}
-{#                            <span class="mr-2">#}
-{#                                <i class="fas fa-circle text-success"></i> Social#}
-{#                            </span>#}
-{#                            <span class="mr-2">#}
-{#                                <i class="fas fa-circle text-info"></i> Referral#}
-{#                            </span>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-7 col-md-6 mb-4 p-3">
+            <div class="row justify-content-center mr-4">
+                <div class="col-10">
+                    <h4 class="">Biểu đồ số lượt đọc trong 7 ngày qua</h4>
+                    <canvas id="myChart" width="300" height="150"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8 col-md-6 mb-4 p-3">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <h2>Lịch tháng 4</h2>
+                    {#                    <a href="{% url 'home_manage' year=previous_year month=previous_month %}">Previous Month</a>#}
+                    {#                    <a href="{% url 'home_manage' year=next_year month=next_month %}">Next Month</a>#}
+                    <table class="table table-borderless table-responsive">
+    <thead>
+        <tr>
+            <th class="mr-2 text-center" style="width: 14.28%">Mon</th>
+            <th class="mr-2 text-center" style="width: 14.28%">Tue</th>
+            <th class="mr-2 text-center" style="width: 14.28%">Wed</th>
+            <th class="mr-2 text-center" style="width: 14.28%">Thu</th>
+            <th class="mr-2 text-center" style="width: 14.28%">Fri</th>
+            <th class="mr-2 text-center" style="width: 14.28%">Sat</th>
+            <th class="mr-2 text-center" style="width: 14.28%">Sun</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for week in calendar %}
+        <tr>
+            {% for day in week %}
+            {% if day == 0 %}
+            <td class="text-center"></td>
+            {% elif day == current_day %}
+            <td style="color: red" class="text-center fw-bold">{{ day }}</td>
+            {% else %}
+            <td class="text-center">{{ day }}</td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-6 mb-4 p-3">
+            <div class="row justify-content-center">
+                <div class="col-10">
+                    <canvas id="browserChart" width="400" height="400"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script>
+        var ctx = document.getElementById('browserChart').getContext('2d');
+        var browserChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Chrome', 'Firefox', 'Edge', 'Safari', 'Others'],
+                datasets: [{
+                    label: 'Browser Counts',
+                    data: [
+                        {{ chrome_count }},
+                        {{ firefox_count }},
+                        {{ edge_count }},
+                        {{ safari_count }},
+                        {{ other_count }}
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Browser Statistics'
+                },
+                legend: {
+                    position: 'bottom'
+                },
+                cutoutPercentage: 0, // Không có phần trống bên trong
+                tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var dataset = data.datasets[tooltipItem.datasetIndex];
+                            var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                                return previousValue + currentValue;
+                            });
+                            var currentValue = dataset.data[tooltipItem.index];
+                            var percentage = Math.floor(((currentValue / total) * 100) + 0.5); // round to nearest integer
+                            return percentage + "%";
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    <script>
+        // Dữ liệu số lượt đọc trong 7 ngày qua
+        var data = {
+            labels: [
+                {% for date, _ in reads_per_day %}
+                    "{{ date }}",
+                {% endfor %}
+            ],
+            datasets: [{
+                label: "Số lượt đọc",
+                data: [
+                    {% for _, reads_count in reads_per_day %}
+                        {{ reads_count }},
+                    {% endfor %}
+                ],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                tension: 0.4,
+                fill: {
+                    target: 'origin',
+                    above: 'rgba(54, 162, 235, 0.2)',
+                }
+            }]
+        };
+
+        // Tùy chỉnh biểu đồ
+        var options = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+
+        // Tạo biểu đồ
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: options
+        });
+    </script>
+
+
+
 {% endblock home_manage %}

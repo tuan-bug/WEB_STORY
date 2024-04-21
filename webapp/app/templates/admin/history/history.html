@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>$Title$</title>
+</head>
+<body>
+<ul>
+{% for log in logs %}
+    <li>
+        <strong>Người dùng:</strong> {{ log.user }} <br>
+        <strong>Thời gian:</strong> {{ log.action_time }} <br>
+        <!-- Cần chú ý với phần lấy được action_display -->
+        <!-- Bạn có thể sử dụng một điều kiện if để kiểm tra và hiển thị nếu cần -->
+        <!-- <strong>Hoạt động:</strong> {{ log.get_action_display }} <br> -->
+        <strong>Đối tượng:</strong> {{ log.object_repr }} <br>
+        <strong>Đối tượng ID:</strong> {{ log.object_id }} <br>
+        <strong>Thay đổi:</strong> {{ log.change_message }} <br>
+    </li>
+    <hr> <!-- Hoặc bất kỳ điều gì bạn muốn để phân tách các mục -->
+{% endfor %}
+</ul>
+</body>
+</html>

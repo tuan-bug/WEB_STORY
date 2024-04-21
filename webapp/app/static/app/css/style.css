@@ -175,7 +175,7 @@ ol {
 	color: #ffffff;
 	text-transform: uppercase;
 	font-weight: 700;
-	background: #F26460;
+	background: #0F75BC;
 	letter-spacing: 1px;
 }
 
@@ -186,7 +186,7 @@ ol {
 	text-transform: uppercase;
 	display: inline-block;
 	padding: 13px 30px 12px;
-	background: #F26460;
+	background: #0F75BC;
 	border: none;
 }
 
@@ -807,7 +807,7 @@ ol {
 	display: block;
 }
 .color_slide {
-	font-size: 18px;
+	font-size: 16px;
 	color: #ffffff;
 	font-weight: 400;
 }
@@ -2989,6 +2989,9 @@ ol {
 /* Tablet Device = 768px */
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+	.media-mt {
+		margin-top: 45px;
+	}
 	.product {
 	padding-top: 80px;
 	padding-bottom: 80px;

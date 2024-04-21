@@ -21,6 +21,13 @@ class Contact(models.Model):
     def __str__(self):
         return self.name
 
+class BrowserStats(models.Model):
+    chrome_count = models.IntegerField(default=0)
+    firefox_count = models.IntegerField(default=0)
+    edge_count = models.IntegerField(default=0)
+    safari_count = models.IntegerField(default=0)
+    other_count = models.IntegerField(default=0)
+
 # // TRUYỆN
 class Customer(models.Model):
     # user = models.ForeignKey(User,on_delete=models.CASCADE, null=True, blank=True)
@@ -69,6 +76,7 @@ class Story(models.Model):
     count_comment = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     story_new = models.CharField(max_length=100, choices=NEW_STATUS_CHOICES, default='not_new')
+
     def __str__(self):
         return self.name
     @property

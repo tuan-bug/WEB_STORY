@@ -1,0 +1,3 @@
+/webapp/app/migrations/*
+/webapp/app/static/app/images/*
+/webapp/webapp/__pycache__/*

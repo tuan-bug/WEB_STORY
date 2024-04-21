@@ -2,138 +2,135 @@
 {% load static %}
 {% block blog-product %}
     {% include 'admin/layout/message.html' %}
+
     <div class="mt-4">
-        <h2 class="text-center">QUẢN LÝ THÀNH VIÊN</h2>
-        <div class="container-fluid">
-            <div class="text-right mb-3">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalAddUser">
-                    Thêm người dùng
-                </button>
-            </div>
-            {% comment %} {% include 'admin/users/addUser.html' %} {% endcomment %}
-            {% comment %} Model Add {% endcomment %}
-            <div class="modal fade" id="exampleModalAddUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm danh mục</h1>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="card shadow mb-4 ml-2">
+            <div class="card-body pr-4 pl-4">
+                <div style="border-bottom: 1px solid #e3e6f0" class="row">
+                    <div style="border-bottom: 1px solid #e3e6f0" class="col-12">
+                        <h3>DANH SÁCH THÀNH VIÊN</h3>
                     </div>
-                    <form method="POST" action="{% url 'addUser' %}" enctype="multipart/form-data">
-                        <div class="modal-body">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="name">Tên đăng nhập:</label>
-                                        {{form.username}}
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="email">Email:</label>
-                                        {{form.email}}
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="email">Họ:</label>
-                                        {{form.first_name}}
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="email">Tên:</label>
-                                        {{form.last_name}}
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="password">Mật khẩu:</label>
-                                        {{form.password1}}
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="confirm-password">Xác nhận mật khẩu:</label>
-                                        {{form.password2}}
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Tên đăng nhập</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1"
+                                   placeholder="Nhập tên đăng nhập">
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay lại</button>
-                            <button type="submit" class="btn btn-primary">Lưu lại</button>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Email</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1"
+                                   placeholder="Nhập email">
                         </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {% include 'admin/users/editUser.html' %}
-            <div class="card shadow mb-4">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tên Đăng Nhập</th>
-                                    <th>Họ tên</th>
-                                    <th>Email</th>
-                                    <th>Quyền</th>
-                                    <th>Thao Tác</th>
-                                </tr>
-                            </thead>
+                    </div>
+                    <div class="col-3">
 
-                            <tbody>
-                                {% for user in users %}
-                                    <tr>
-                                        <td>
-                                            {{ user.id }}
-                                        </td>
-                                        <td>
-                                            {{ user.username }}
-                                        </td>
-                                        <td>
-                                            {{ user.last_name }}  {{ user.first_name }}
-                                        </td>
-                                        <td>
-                                            {{ user.email }}
-                                        </td>
-                                        <td>
-                                            {% if user.is_staff %}
-                                                Admin
-                                            {% else %}
-                                                Người dùng
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <a href="{% url 'editUser' %}?id={{ user.id }}"
-                                                class="btn btn-warning btn-circle mr-2" data-bs-toggle="modal" data-bs-target="#exampleModalEditUser-{{user.id}}">
-                                                
-                                                <img src="{% static 'admin/icons/pen (1).png' %}" alt="">
-                                            </a>
-                                            {% comment %} {% include 'admin/users/editUser.html' %} {% endcomment %}
-                                            <a href="" data-product-id="{{ order.id }}"
-                                                data-product-name="{{ order.name }}"
-                                                class="btn btn-danger btn-circle"
-                                                data-toggle="modal" data-target="#deleteUserModal_{{ user.id }}">
-
-                                                <img src="{% static 'admin/icons/trash (1).png' %}" alt="">
-                                            </a>
-                                            {% include 'admin/users/delete.html' %}
-                                            
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    </div>
+                    <div class="col-3 d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                     </div>
                 </div>
+                <div class="text-left mb-3 mt-3">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModalAddUser">
+                        <i class="fa fa-plus-circle" style="font-size:20px"></i>
+                        Thêm mới
+                    </button>
+                </div>
+                <div class="table-responsive mt-4">
+                    <table style="border: 1px solid #e3e6f0" class="table text-center" id="dataTable" width="100%"
+                           cellspacing="0">
+                        <thead>
+                        <tr style="padding-bottom: 25px;">
+                            <th style="border: 1px solid #e3e6f0">STT</th>
+                            <th style="border: 1px solid #e3e6f0">Tên Đăng Nhập</th>
+                            <th style="border: 1px solid #e3e6f0">Họ và Tên</th>
+                            <th style="border: 1px solid #e3e6f0">Email</th>
+                            <th style="border: 1px solid #e3e6f0">Quyền</th>
+                            <th style="border: 1px solid #e3e6f0">Thao Tác</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td style="border: 1px solid #e3e6f0">
+                                    {{ forloop.counter }}
+                                </td>
+                                <td style="border: 1px solid #e3e6f0">
+                                    {{ user.username }}
+                                </td>
+                                <td style="border: 1px solid #e3e6f0">
+                                    {{ user.last_name }} {{ user.first_name }}
+                                </td>
+                                <td style="border: 1px solid #e3e6f0">
+                                    {{ user.email }}
+                                </td>
+                                <td style="border: 1px solid #e3e6f0">
+                                    {% if user.is_staff %}
+                                        Admin
+                                    {% else %}
+                                        Người dùng
+                                    {% endif %}
+                                </td>
+                                <td style="border: 1px solid #e3e6f0">
+                                    <a href="{% url 'editUser' %}?id={{ user.id }}"
+                                       class="btn btn-warning btn-circle mr-2" data-bs-toggle="modal"
+                                       data-bs-target="#exampleModalEditUser-{{ user.id }}">
+
+                                        <i class="fa fa-pencil" style="font-size: 20px"></i>
+                                    </a>
+                                    {% comment %} {% include 'admin/users/editUser.html' %} {% endcomment %}
+                                    <a href="" class="btn btn-danger btn-circle"
+                                       data-toggle="modal" data-target="#deleteUserModal_{{ user.id }}">
+
+                                        <i class="fa fa-trash-o" style="font-size: 20px "></i>
+                                    </a>
+                                    {% include 'admin/users/delete.html' %}
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if users.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1"><i class='fas fa-angle-double-left'></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ users.previous_page_number }}"><i
+                                        class='fas fa-angle-left'></i></a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item disabled">
+                            <span class="page-link">{{ users.number }}</span>
+                        </li>
+
+                        {% if categories.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ users.next_page_number }}"><i
+                                        class='fas fa-angle-right'></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ users.paginator.num_pages }}"><i
+                                        class='fas fa-angle-double-right'></i></a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+
             </div>
         </div>
     </div>
 
-    
+        {% include 'admin/users/addUser.html' %}
+
+        {% include 'admin/users/editUser.html' %}
+
+
+
 {% endblock blog-product %}

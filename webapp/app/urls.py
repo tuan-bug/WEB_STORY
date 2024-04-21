@@ -45,6 +45,8 @@ urlpatterns = [
     # ADMIN
     path('manage/', views.Manage, name="manage"),
     path('home_manage/', views.homeManage, name="home_manage"),
+    #path('home_manage/<int:year>/<int:month>/', views.homeManage, name='home_manage'),
+
 
 
     # STORY
@@ -68,7 +70,7 @@ urlpatterns = [
     path('delUser/<int:id>', views.deleteUser, name="deleteUser"),
 
 
-
+    path('history/', views.manageHistory, name="manageHistory"),
 
 
 

@@ -18,6 +18,7 @@ def detail(request):
     print(story.category)
     listComment = Comment.objects.filter(story=story)
 
+    lstStory = Story.objects.all()[:4]
     chapters = Chapter.objects.filter(story=story)
     if chapters.exists():
         first_chapter = chapters.first()
@@ -58,6 +59,7 @@ def detail(request):
         'formComment': formComment,
         'listComment': listComment,
         'categories': categories,
+        'lstStory': lstStory
     }
     return render(request, 'app/detail.html', context)
 

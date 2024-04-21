@@ -12,7 +12,7 @@ from app.python.admin.manage import is_admin
 def manageCategory(request):
     form = AddCategory()
     categories = Genre.objects.all().order_by('name')  # lay cac damh muc lon
-    paginator = Paginator(categories, 6)
+    paginator = Paginator(categories, 8)
     page_number = request.GET.get('page')
     page_categories = paginator.get_page(page_number)
     feedback = Contact.objects.all().count()
