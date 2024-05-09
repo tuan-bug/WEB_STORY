@@ -3,7 +3,7 @@
 
 {% block blog-page %}
     {% include 'app/layout/message.html' %}
-    
+
     <!-- Related Blog Section Begin -->
     <section class="related-blog spad">
         <div class="container">
@@ -15,29 +15,31 @@
                 </div>
             </div>
             <div class="row">
-            {% if  story_chapter_list %}
-            	{% for item in story_chapter_list %}
-                    
-                    <div class="col-lg-3 col-md-3 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic">
-                            <img src="{{ item.story.ImageURL }}" alt="">
+                {% if  story_chapter_list %}
+                    {% for item in story_chapter_list %}
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 mix oranges fresh-meat">
+                            <a href="">
+                                <div class="featured__item">
+                                    <div class="featured__item__pic set-bg" data-setbg="{{ item.story.ImageURL }}"></div>
+                                    <div style="height: 65px" class="featured__item__text ">
+                                        <h6><a href="{% url 'detail' %}?slug={{ item.slug }}">{{ item.story.name }}</a></h6>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        {% if story.chapter_number %}
+                                            <a style="font-size: 14px"
+                                               href="{% url 'chapter_detail' chapter_slug=story.slug %}?chap={{ story.chapter_id }}">Chap {{ item.chapter.name }}</a>
+                                            <span style="font-size: 11px">{{ story.latest_chapter_date }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                        <div class="blog__item__text">
-{#                                <ul>#}
-{#                                    <li><i class="fa fa-calendar-o"></i> 15/10/2023</li>#}
-{#                                    <li><i class="fa fa-comment-o"></i> 5</li>#}
-{#                                </ul>#}
-                            <h5><a href="#">{{ item.story.name }}</a></h5>
-                            <p>{{ item.chapter.name }} </p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <h3>Bạn chưa đăng nhập. Vui lòng đăng nhập để xem lịch sử đọc</h3>
-            {% endif %} 
-                
+
+                    {% endfor %}
+                {% else %}
+                    <h3>Bạn chưa đăng nhập. Vui lòng đăng nhập để xem lịch sử đọc</h3>
+                {% endif %}
+
             </div>
         </div>
     </section>

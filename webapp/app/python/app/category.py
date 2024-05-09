@@ -7,6 +7,13 @@ from django.db.models import Q
 def category(request):
     user_not_login = "none" if request.user.is_authenticated else "show"
     user_login = "show" if request.user.is_authenticated else "none"
+    if request.user.is_authenticated:
+        profiles = Customer.objects.filter(user=request.user).order_by('-created_at')
+        if profiles:
+            profile = profiles.first()  # Lấy đối tượng đầu tiên trong danh sách đã sắp xếp
+            print(profile.profile_image)
+        else:
+            profile = None
     categories = Genre.objects.all()
     stories = Story.objects.all()
     for story in stories:
@@ -32,6 +39,7 @@ def category(request):
           'user_not_login': user_not_login,
           'categories': categories,
           'stories': stories,
+        'profile': profile,
     }
     return render(request, "app/category.html", context)
 
@@ -39,6 +47,13 @@ def category(request):
 def stories_by_category(request, category_id):
     user_not_login = "none" if request.user.is_authenticated else "show"
     user_login = "show" if request.user.is_authenticated else "none"
+    if request.user.is_authenticated:
+        profiles = Customer.objects.filter(user=request.user).order_by('-created_at')
+        if profiles:
+            profile = profiles.first()  # Lấy đối tượng đầu tiên trong danh sách đã sắp xếp
+            print(profile.profile_image)
+        else:
+            profile = None
     categories = Genre.objects.all()
     stories = Story.objects.filter(category__id=category_id)
     for story in stories:
@@ -63,5 +78,6 @@ def stories_by_category(request, category_id):
         'stories': stories,
         'user_login': user_login,
         'user_not_login': user_not_login,
+        'profile': profile,
     }
     return render(request, 'app/category.html', context)

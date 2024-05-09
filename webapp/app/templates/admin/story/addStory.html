@@ -41,13 +41,13 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="categoryDescription">Truyện mới</label>
+                                <label for="categoryDescription">Loại truyện <span class="required">*</span></label>
                                 {{ form.story_new }}
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label>Chọn ảnh truyện: </label>
+                                <label>Ảnh bìa</label>
                                 <div class="input-group">
                                     <div class="custom-file">
                                         {{ form.image }}
@@ -57,7 +57,7 @@
                         </div>
                         <div class="col-12 ">
                             <div class="form-group">
-                                <label for="{{ form.category.id_for_label }}">Thuộc danh mục <span class="required">*</span></label><br>
+                                <label for="{{ form.category.id_for_label }}">Danh mục <span class="required">*</span></label><br>
                                 <div class="row justify-content-center">
                                     
                                     {% for category in form.category.field.choices %}
@@ -91,7 +91,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay lại</button>
-                    <button type="submit" class="btn btn-primary" id="saveStoryBtn">Lưu lại</button>
+                    <button type="submit" class="btn btn-primary" id="saveStoryBtn">Lưu thông tin</button>
                 </div>
             </form>
         </div>

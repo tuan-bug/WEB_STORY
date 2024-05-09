@@ -15,10 +15,17 @@ def base(request):
     else:
         print('not admin')
         show_manage = 'none'
-    #slide = Slide.objects.all()
-    #  # lay cac damh muc lon
+    if request.user.is_authenticated:
+        profiles = Customer.objects.filter(user=request.user).order_by('-created_at')
+        if profiles:
+            profile = profiles.first()  # Lấy đối tượng đầu tiên trong danh sách đã sắp xếp
+            print(profile.profile_image)
+            admin_template = 'admin_dashboard.html'
+        else:
+            profile = None
     context = {
         'show_manage': show_manage,
+        'profile': profile,
     }
     return render(request, 'app/base.html', context)
 
@@ -30,22 +37,14 @@ def getHome(request):
         user_not_login = "show"
         user_login = "none"
 
-    # storys_with_latest_chapters = Story.objects.annotate(
-    #     latest_chapter_name=Substr('chapters__name', 1, 7)
-    # )
-    # story = Story.objects.all()
-    #
-    # # Tạo một thuộc tính mới latest_chapter_words để lưu hai từ đầu tiên từ tên của chương mới nhất
-    # for story in story:
-    #     latest_chapter = story.chapters.order_by('-name').first()
-    #     if latest_chapter:
-    #         story.latest_chapter_words = latest_chapter.name.split()[:2]
-    #     else:
-    #         story.latest_chapter_words = []
-    #
-    # # In hai từ đầu tiên từ tên chương mới nhất của mỗi câu chuyện
-    # for story in story:
-    #     print(story.latest_chapter_words)
+    profile = None
+    if request.user.is_authenticated:
+        profiles = Customer.objects.filter(user=request.user).order_by('-created_at')
+        if profiles:
+            profile = profiles.first()  # Lấy đối tượng đầu tiên trong danh sách đã sắp xếp
+            print(profile.profile_image)
+        else:
+            profile = None
     user_agent = request.META.get('HTTP_USER_AGENT', '')
     print("TRÌNH DUYỆT: ")
     print(user_agent)
@@ -85,6 +84,7 @@ def getHome(request):
         'storys': stories,
         'user_not_login': user_not_login,
         'user_login': user_login,
+        'profile': profile,
     }
     return render(request, 'app/home.html', context)
 

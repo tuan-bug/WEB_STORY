@@ -1,0 +1,122 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block chat-page %}
+    {% include 'app/layout/message.html' %}
+    <!-- Related Blog Section Begin -->
+    <section class="related-blog spad">
+        <div class="container">
+            <div class="row mb-5">
+
+                <div class="col-md-8 offset-md-2">
+
+                    <div id="chat-box" class="border p-3 mb-3" style="height: 600px; overflow-y: scroll;">
+                        {% if messages %}
+                            {% with last_sender=None %}
+                                {% for message in messages %}
+                                    {% if message.user == request.user %}
+                                        <div class="message sent-message p-2">
+                                            <span style="border: 1px solid #e4606d; border-radius: 6px"
+                                                  class="p-2">{{ message.chat }}</span>
+                                        </div>
+                                    {% else %}
+                                        {% if last_sender != message.user %}
+                                            {% if message.user %}
+                                                <div class="message received-message">
+                                                    <span class="user">
+                                                        <img style="width: 40px; height: 40px; border-radius: 50%;"
+                                                             src="{{ message.customer_img.url }}" alt="Hi">
+                                                    </span>
+                                                    <span style="border: 1px solid #e4606d; border-radius: 6px"
+                                                          class="p-2">{{ message.chat }}
+                                                    </span>
+                                                </div>
+                                            {% else %}
+                                                <div class="message received-message">
+                                                    <span class="user">
+                                                        <img style="width: 40px; height: 40px; border-radius: 50%;"
+                                                             src="https://inkythuatso.com/uploads/thumbnails/800/2022/05/anh-anime-buon-cute-04-09-53-02.jpg"
+                                                             alt="Hi">
+                                                    </span>
+                                                    <span style="border: 1px solid #e4606d; border-radius: 6px"
+                                                          class="p-2">{{ message.chat }}
+                                                    </span>
+                                                </div>
+                                            {% endif %}
+                                            {% if message.user %}
+                                                {% with last_sender=message.user %}
+{#                                                    {{ last_sender }} <!-- In giá trị của biến last_sender -->#}
+                                                {% endwith %}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endwith %}
+                        {% endif %}
+
+                    </div>
+                    <form id="chat-form" method="post" action="{% url 'send_message' %}">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="text" id="message" name="message" class="form-control"
+                                   placeholder="Nội dung tin nhắn...">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">Gửi</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .chat-container {
+            height: 400px;
+            overflow-y: scroll;
+        }
+
+        .message {
+            margin-bottom: 10px;
+        }
+
+        .message .user {
+            font-weight: bold;
+        }
+
+        .sent-message {
+            text-align: right;
+        }
+
+        .received-message {
+            text-align: left;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            $('#chat-form').submit(function (e) {
+                e.preventDefault();
+                var message = $('#message').val().trim();
+                if (message !== '') {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/send-message/',
+                        data: $(this).serialize(),
+                        success: function (response) {
+                            if (response.success) {
+                                $('#chat-box').append('<div class="message my-message">' + response.message + '</div>');
+                                $('#message').val('');
+                                $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
+                            }
+                        },
+                        error: function (xhr, errmsg, err) {
+                            console.log('Error sending message');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+{% endblock chat-page %}

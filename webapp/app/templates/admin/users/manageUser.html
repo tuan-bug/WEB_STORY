@@ -101,8 +101,7 @@
                                 <a class="page-link" href="?page=1"><i class='fas fa-angle-double-left'></i></a>
                             </li>
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ users.previous_page_number }}"><i
-                                        class='fas fa-angle-left'></i></a>
+                                <a class="page-link" href="?page={{ users.previous_page_number }}"><i class='fas fa-angle-left'></i> </a>
                             </li>
                         {% endif %}
 
@@ -110,14 +109,12 @@
                             <span class="page-link">{{ users.number }}</span>
                         </li>
 
-                        {% if categories.has_next %}
+                        {% if users.has_next %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ users.next_page_number }}"><i
-                                        class='fas fa-angle-right'></i></a>
+                                <a class="page-link" href="?page={{ users.next_page_number }}"><i class='fas fa-angle-right'></i></a>
                             </li>
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ users.paginator.num_pages }}"><i
-                                        class='fas fa-angle-double-right'></i></a>
+                                <a class="page-link" href="?page={{ users.paginator.num_pages }}"><i class='fas fa-angle-double-right'></i></a>
                             </li>
                         {% endif %}
                     </ul>

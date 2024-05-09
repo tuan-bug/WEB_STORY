@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from app.models import *
 from django.contrib.auth.decorators import login_required, user_passes_test
 from app.python.admin.manage import is_admin
-
+from django.db.models import Q
 
 @login_required
 @user_passes_test(is_admin)
@@ -17,29 +17,13 @@ def manageCategory(request):
     page_categories = paginator.get_page(page_number)
     feedback = Contact.objects.all().count()
     contacts = Contact.objects.all()
+
     context ={'categories': page_categories,
               'feedback': feedback,
               'contacts': contacts,
               'form': form,
               }
     return render(request, 'admin/category/managementCategory.html', context)
-
-# def addCategory(request):
-#     if request.method == 'POST':
-#         form = AddCategory(request.POST, request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Thêm danh mục thành công')
-#             return redirect('manageCategory')
-#         else:
-#             return render(request, 'admin/category/manageCategory.html', {'form': form})
-#             #messages.error(request, 'Thêm danh mục thất bại. Vui lòng kiểm tra lại thông tin.')
-#     else:
-#         messages.error(request, 'Thêm danh mục thất bại. Vui lòng kiểm tra lại thông tin.')
-#         #form = AddCategory()
-#     context = {'form': form}
-#     return render(request, 'admin/category/addCategory.html', context)
-
 
 def addCategory(request):
     if request.method == 'POST':
@@ -57,7 +41,7 @@ def addCategory(request):
      
 
 def editCategory(request):
-    id = request.GET.get('id', '')  # Lấy id khi người dùng click vào sản phẩm nào đó
+    id = request.GET.get('id', '')  # Lấy id khi người dùng click
     category = get_object_or_404(Genre, id=id)
     
     if request.method == 'POST':
@@ -72,18 +56,6 @@ def editCategory(request):
     else:
         return JsonResponse({'success': False, 'errors': errors}, status=405)
 
-    # form = AddCategory(instance=category,
-    #                    initial={'sub_category': category.sub_category,
-    #                             'is_sub': category.is_sub,
-    #                             'name': category.name,
-    #                             'slug': category.slug,
-    #                             'messages': messages,
-    #                             })
-
-    # context = {'category': category,
-    #            'form': form}
-    # return render(request, 'admin/category/editCategory.html', context)
-
 
 def deleteCategory(request, id):
     # id = request.GET.get('id', '')  # lấy id khi người dùng vlick vào sản phẩm nào đó
@@ -94,3 +66,16 @@ def deleteCategory(request, id):
     context ={'category': category,
               'messages': messages,}
     return render(request, 'admin/deleteCategory.html', context)
+
+def searchCategory(request):
+    if 'category_name' in request.GET:
+        category_name = request.GET['category_name']
+        categories = Genre.objects.filter(
+            Q(name__icontains=category_name) | Q(name__icontains=category_name.lower()) | Q(
+                name__icontains=category_name.upper()))
+    else:
+        categories = Genre.objects.all()
+    context = {
+        'categories': categories,
+    }
+    return render(request, 'admin/category/managementCategory.html', context)

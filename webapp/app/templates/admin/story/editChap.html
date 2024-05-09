@@ -1,0 +1,27 @@
+<!-- Modal Edit Category -->
+{% for chap in chapters %}
+<div class="modal fade" id="exampleModalEditChap-{{chap.id}}" tabindex="-1" aria-labelledby="exampleModalLabelEditChap" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Sửa Chap</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editCategoryForm-{{chap.id}}" method="POST" action="{% url 'editCategory' %}?id={{ chap.id }}">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ chap.id }}">
+                    <div class="form-group">
+                        <label for="editCategoryName">Tên Chap</label>
+                        <input type="text" class="form-control" id="editCategoryName-{{chap.id}}" name="name" value="{{ chap.name }}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay lại</button>
+                    <button type="submit" form="editChapForm-{{chap.id}}" class="btn btn-primary">Lưu Thay Đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}

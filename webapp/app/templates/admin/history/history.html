@@ -1,24 +1,95 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-<ul>
-{% for log in logs %}
-    <li>
-        <strong>Người dùng:</strong> {{ log.user }} <br>
-        <strong>Thời gian:</strong> {{ log.action_time }} <br>
-        <!-- Cần chú ý với phần lấy được action_display -->
-        <!-- Bạn có thể sử dụng một điều kiện if để kiểm tra và hiển thị nếu cần -->
-        <!-- <strong>Hoạt động:</strong> {{ log.get_action_display }} <br> -->
-        <strong>Đối tượng:</strong> {{ log.object_repr }} <br>
-        <strong>Đối tượng ID:</strong> {{ log.object_id }} <br>
-        <strong>Thay đổi:</strong> {{ log.change_message }} <br>
-    </li>
-    <hr> <!-- Hoặc bất kỳ điều gì bạn muốn để phân tách các mục -->
-{% endfor %}
-</ul>
-</body>
-</html>
+{% extends 'admin/manage.html' %}
+{% load static %}
+{% block blog-category %}
+    {% include 'admin/layout/message.html' %}
+    <div class="mt-4">
+        {% include 'admin/category/addCategory.html' %}
+        <div class="card shadow mb-4 ml-2">
+            <div class="card-body pr-4 pl-4">
+                <div style="border-bottom: 1px solid #e3e6f0" class="row">
+                    <div style="border-bottom: 1px solid #e3e6f0" class="col-12">
+                        <h3>DANH SÁCH LỊCH SỬ</h3>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Tên đối tượng</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1"
+                                   placeholder="Nhập tên đối tượng">
+                        </div>
+                    </div>
+                    <div class="col-6">
+
+                    </div>
+                    <div class="col-3 d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive mt-4">
+                    <table style="border: 1px solid #e3e6f0" class="table text-center" id="dataTable" width="100%"
+                           cellspacing="0">
+                        <thead>
+                        <tr style="padding-bottom: 25px;">
+                            <th style="border: 1px solid #e3e6f0">STT</th>
+                            <th style="border: 1px solid #e3e6f0">Người tác động</th>
+                            <th style="border: 1px solid #e3e6f0">Thời gian</th>
+                            <th style="border: 1px solid #e3e6f0">Đối tượng</th>
+                            <th style="border: 1px solid #e3e6f0">Thay đổi</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for log in logs %}
+                            <tr>
+                                <td style="border: 1px solid #e3e6f0">{{ forloop.counter }}</td>
+                                <td>{{ log.user }}</td>
+                                <td style="border: 1px solid #e3e6f0">{{ log.action_time | date:"d/m/Y H:i:s"  }}</td>
+                                <td style="border: 1px solid #e3e6f0">{{ log.object_repr }}</td>
+                                <td style="border: 1px solid #e3e6f0">{{ log.change_message }} </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination justify-content-center">
+                    <ul class="pagination">
+                        {% if logs.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1">
+                                    <i class='fas fa-angle-double-left'></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ logs.previous_page_number }}"><i class='fas fa-angle-left'></i></a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item disabled">
+                            <span class="page-link">
+                                Page {{ logs.number }} of {{ logs.paginator.num_pages }}
+                            </span>
+                        </li>
+
+                        {% if logs.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ logs.next_page_number }}">
+                                    <i class='fas fa-angle-right'></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ logs.paginator.num_pages }}">
+                                    <i class='fas fa-angle-double-right'></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Edit Category -->
+    {% include 'admin/category/editCategory.html' %}
+    <!-- Modal Delete Category -->
+    {% include 'admin/category/deleteCategory.html' %}
+
+
+{% endblock blog-category %}

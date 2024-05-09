@@ -6,24 +6,24 @@
         {% include 'admin/category/addCategory.html' %}
         <div class="card shadow mb-4 ml-2">
             <div class="card-body pr-4 pl-4">
-                <div style="border-bottom: 1px solid #e3e6f0" class="row">
-                    <div style="border-bottom: 1px solid #e3e6f0" class="col-12">
-                        <h3>DANH SÁCH DANH MỤC</h3>
-                    </div>
-                    <div class="col-3">
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Tên danh mục</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1"
-                                   placeholder="Nhập tên danh mục">
+                <form action="{% url 'searchCategory' %}" method="GET">
+                    <div style="border-bottom: 1px solid #e3e6f0" class="row">
+                        <div style="border-bottom: 1px solid #e3e6f0" class="col-12">
+                            <h3>DANH SÁCH DANH MỤC</h3>
+                        </div>
+                        <div class="col-3 mt-2">
+                            <div class="form-group">
+                                <label for="category_name">Tên danh mục</label>
+                                <input type="text" class="form-control" id="category_name" name="category_name"
+                                       placeholder="Nhập tên danh mục">
+                            </div>
+                        </div>
+                        <div class="col-6"></div>
+                        <div class="col-3 d-flex justify-content-center align-items-center">
+                            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                         </div>
                     </div>
-                    <div class="col-6">
-
-                    </div>
-                    <div class="col-3 d-flex justify-content-center align-items-center">
-                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                    </div>
-                </div>
+                </form>
                 <div class="text-left mb-3 mt-3">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#exampleModalAddCategory">
@@ -36,7 +36,7 @@
                            cellspacing="0">
                         <thead>
                         <tr style="padding-bottom: 25px;">
-                            <th style="border: 1px solid #e3e6f0">ID</th>
+                            <th style="border: 1px solid #e3e6f0">STT</th>
                             <th style="border: 1px solid #e3e6f0">Tên Danh Mục</th>
                             <th style="border: 1px solid #e3e6f0">Đường Dẫn</th>
                             <th style="border: 1px solid #e3e6f0">Mô tả</th>
@@ -49,7 +49,7 @@
                                 <td style="border: 1px solid #e3e6f0">{{ forloop.counter }}</td>
                                 <td>{{ category.name }}</td>
                                 <td style="border: 1px solid #e3e6f0">{{ category.slug }}</td>
-                                <td style="border: 1px solid #e3e6f0">{{ category.slug }}</td>
+                                <td style="border: 1px solid #e3e6f0">{{ category.description }}</td>
                                 <td style="border: 1px solid #e3e6f0">
                                     <button class="mr-2 btn btn-warning btn-circle" data-bs-toggle="modal"
                                             data-bs-target="#exampleModalEditCategory-{{ category.id }}">
@@ -72,8 +72,7 @@
                                 <a class="page-link" href="?page=1"><i class='fas fa-angle-double-left'></i></a>
                             </li>
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ categories.previous_page_number }}"><i
-                                        class='fas fa-angle-left'></i></a>
+                                <a class="page-link" href="?page={{ categories.previous_page_number }}"><i class='fas fa-angle-left'></i> </a>
                             </li>
                         {% endif %}
 
@@ -83,17 +82,14 @@
 
                         {% if categories.has_next %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ categories.next_page_number }}"><i
-                                        class='fas fa-angle-right'></i></a>
+                                <a class="page-link" href="?page={{ categories.next_page_number }}"><i class='fas fa-angle-right'></i></a>
                             </li>
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ categories.paginator.num_pages }}"><i
-                                        class='fas fa-angle-double-right'></i></a>
+                                <a class="page-link" href="?page={{ categories.paginator.num_pages }}"><i class='fas fa-angle-double-right'></i></a>
                             </li>
                         {% endif %}
                     </ul>
                 </nav>
-
             </div>
         </div>
     </div>

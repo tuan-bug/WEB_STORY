@@ -26,8 +26,8 @@ from .python.admin.manage_slide import manageSlide, addSlide, editSlide, deleteS
 from .python.admin.updateStatus import update_status
 from .python.admin.manage_user import manageUser, deleteUser, addUser, editUser
 
-from .python.admin.manage_category import manageCategory, addCategory, editCategory, deleteCategory
-from .python.admin.manage_story import manageStory, addStory, editStory, deleteStory, viewStory, addChapter
+from .python.admin.manage_category import manageCategory, addCategory, editCategory, deleteCategory, searchCategory
+from .python.admin.manage_story import manageStory, addStory, editStory, deleteStory, viewStory, addChapter, searchStory
 from django.views.decorators.csrf import csrf_exempt
 
 import hashlib
@@ -78,6 +78,13 @@ def update_view_history(request, story_id, chapter_id):
     return JsonResponse({'status': 'error'})
 
 def view_history(request):
+    if request.user.is_authenticated:
+        profiles = Customer.objects.filter(user=request.user).order_by('-created_at')
+        if profiles:
+            profile = profiles.first()  # Lấy đối tượng đầu tiên trong danh sách đã sắp xếp
+            print(profile.profile_image)
+        else:
+            profile = None
     user_not_login = "none" if request.user.is_authenticated else "show"
     user_login = "show" if request.user.is_authenticated else "none"
     story_chapter_list = []
@@ -95,6 +102,7 @@ def view_history(request):
             'story_chapter_list': story_chapter_list,
             'user_not_login':user_not_login,
             'user_login': user_login,
+            'profile': profile,
         }
         return render(request, 'app/history.html', context)
     else:
@@ -110,7 +118,13 @@ def view_history(request):
 def story_follow(request):
     user_not_login = "none" if request.user.is_authenticated else "show"
     user_login = "show" if request.user.is_authenticated else "none"
-
+    if request.user.is_authenticated:
+        profiles = Customer.objects.filter(user=request.user).order_by('-created_at')
+        if profiles:
+            profile = profiles.first()  # Lấy đối tượng đầu tiên trong danh sách đã sắp xếp
+            print(profile.profile_image)
+        else:
+            profile = None
     followed_stories = []  # Khởi tạo danh sách các câu chuyện mà người dùng đã theo dõi
     if request.user.is_authenticated:
         follows = Follow.objects.filter(user=request.user)
@@ -141,6 +155,7 @@ def story_follow(request):
         'user_not_login': user_not_login,
         'user_login': user_login,
         'stories': followed_stories,
+        'profile': profile,
     }
     return render(request, 'app/follow.html', context)
 
@@ -235,3 +250,76 @@ def ratting_year(request):
         'stories': popular_chapters
     }
     return render(request, 'app/ratting.html', context)
+
+
+def chat(request):
+    messages = Chat.objects.all()
+    users = User.objects.all()
+    print(messages)
+    for mes in messages:
+        print(mes.user)
+        for user in users:
+            if mes.user == user:
+                profiles = Customer.objects.filter(user=user).order_by('-created_at')
+                if profiles:
+                    profile = profiles.first()  # Lấy đối tượng đầu tiên trong danh sách đã sắp xếp
+                    print(profile.profile_image)
+                else:
+                    profile = None
+                mes.customer_img = profile.profile_image
+
+    form = FormChat()
+    user_not_login = "none" if request.user.is_authenticated else "show"
+    user_login = "show" if request.user.is_authenticated else "none"
+    if request.user.is_authenticated:
+        profiles = Customer.objects.filter(user=request.user).order_by('-created_at')
+        if profiles:
+            profile = profiles.first()  # Lấy đối tượng đầu tiên trong danh sách đã sắp xếp
+            print(profile.profile_image)
+        else:
+            profile = None
+    context = {
+        'form': form,
+        'user_not_login': user_not_login,
+        'user_login': user_login,
+        'profile': profile,
+        'messages': messages,
+    }
+    return render(request, 'app/chat.html', context)
+
+
+def send_message(request):
+    if request.method == 'POST':
+        message_text = request.POST.get('message', '')
+        if message_text:
+            # Lưu tin nhắn vào cơ sở dữ liệu
+            message = Chat(user=request.user,chat=message_text)
+            message.save()
+            return redirect('chat')
+    return JsonResponse({'success': False})
+
+
+def editChapter(request):
+    if request.method == 'POST' and request.is_ajax():
+        chapter_id = request.POST.get('id')
+        chapter_name = request.POST.get('name')
+
+        try:
+            chapter = Chapter.objects.get(id=chapter_id)
+            chapter.name = chapter_name
+            chapter.save()
+            return JsonResponse({'success': True})
+        except Chapter.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Chapter not found'})
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+
+def deleteChap(request, id):
+    Chapter.objects.filter(id=id).delete()
+    messages.success(request, 'Đã xóa chap thành công')
+    return redirect('manageStory')
+    context = {
+               'messages': messages,
+            }
+    return render(request, 'admin/story/view_story.html', context)

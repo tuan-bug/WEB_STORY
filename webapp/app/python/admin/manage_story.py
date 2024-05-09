@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.core.files.storage import FileSystemStorage
-
+from django.db.models import Q
 from app.models import *
 from django.contrib.auth.decorators import login_required, user_passes_test
 
@@ -14,8 +14,13 @@ from app.python.admin.manage import is_admin
 def manageStory(request):
     storys = Story.objects.all()
     categories = Genre.objects.all()
+    paginator = Paginator(storys, 6)
+    # Lấy số trang từ tham số truy vấn (nếu có)
+    page_number = request.GET.get('page')
+    # Lấy các mục cho trang hiện tại
+    page_obj = paginator.get_page(page_number)
     form = StoryForm()
-    context = {'storys': storys,
+    context = {'storys': page_obj,
                'categories': categories,
                'form': form,
         }
@@ -126,3 +131,28 @@ def addChapter(request):
 
     }
     return render(request, 'admin/story/addChapter.html', context)
+
+
+def searchStory(request):
+    if 'name_category' in request.GET or 'name_story' in request.GET:
+        name_category = request.GET.get('name_category', '')
+        name_story = request.GET.get('name_story', '')
+
+        if name_category and name_story:
+            # Tìm kiếm cả tên danh mục và tên truyện
+            stories = Story.objects.filter(Q(category__name__icontains=name_category) & Q(name__icontains=name_story))
+        elif name_category:
+            # Chỉ tìm kiếm theo tên danh mục
+            stories = Story.objects.filter(category__name__icontains=name_category)
+        elif name_story:
+            # Chỉ tìm kiếm theo tên truyện
+            stories = Story.objects.filter(name__icontains=name_story)
+    else:
+        stories = Story.objects.all()
+
+    print(stories)
+    context = {
+        'storys': stories,
+    }
+
+    return render(request, 'admin/story/managementStory.html', context)

@@ -27,7 +27,7 @@
                 <li><a href="">CON GÁI</a></li>
                 <li><a href="{% url 'story_follow' %}">THEO DÕI</a></li>
                 <li><a href="{% url 'view_history' %}">LỊCH SỬ</a></li>
-                <li><a href="">GROUP</a></li>
+                <li><a href="{% url 'chat' %}">GROUP</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -68,7 +68,7 @@
                     <div class="header__top__right__auth dropdown " style="display: {{ user_login }}">
                         
                         <a class="dropdown-toggle mt-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  href="{% url 'login' %} " >
-                            <img style="width: 50px; height: 50px; border-radius: 50%;border: 1px solid #0F75BC;  " src="https://th.bing.com/th/id/OIP.kZTP9p8fsKVEfXx5m8gV_AHaHa?w=182&h=182&c=7&r=0&o=5&pid=1.7" alt="">
+                            <img style="width: 50px; height: 50px; border-radius: 50%;border: 1px solid #0F75BC;  " src="{{ profile.profile_image.url }}" alt="">
                             <span style="font-size: 16px;" class="ml-2">{{request.user}}</span>
                         </a>
                         <!-- Dropdown Menu -->
@@ -106,7 +106,7 @@
                             <li><a href="">CON GÁI</a></li>
                             <li><a href="{% url 'story_follow' %}">THEO DÕI</a></li>
                             <li><a href="{% url 'view_history' %}">LỊCH SỬ</a></li>
-                            <li><a href="">GROUP</a></li>
+                            <li><a href="{% url 'chat' %}">GROUP</a></li>
 {#                            <li><a href="">Shop</a></li>#}
 {#                            <li><a href="#">Pages</a></li>#}
                             

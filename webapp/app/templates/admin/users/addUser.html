@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm danh mục</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm người dùng</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="POST" action="{% url 'addUser' %}" enctype="multipart/form-data">
@@ -12,13 +12,13 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="name">Tên đăng nhập:</label>
+                                <label for="name">Tên đăng nhập: <span class="required">*</span></label>
                                 {{ form.username }}
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="email">Email:</label>
+                                <label for="email">Email: <span class="required">*</span></label>
                                 {{ form.email }}
                             </div>
                         </div>
@@ -36,13 +36,13 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="password">Mật khẩu:</label>
+                                <label for="password">Mật khẩu: <span class="required">*</span></label>
                                 {{ form.password1 }}
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="confirm-password">Xác nhận mật khẩu:</label>
+                                <label for="confirm-password">Xác nhận mật khẩu: <span class="required">*</span></label>
                                 {{ form.password2 }}
                             </div>
                         </div>
@@ -51,9 +51,16 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay lại
                     </button>
-                    <button type="submit" class="btn btn-primary">Lưu lại</button>
+                    <button type="submit" class="btn btn-primary">Lưu thông tin</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<style>
+    .required{
+    color: red;
+    margin-left: 3px;
+    }
+</style>

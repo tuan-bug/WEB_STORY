@@ -11,4 +11,5 @@ admin.site.register(Customer)
 admin.site.register(ViewHistory)
 admin.site.register(Follow)
 admin.site.register(BrowserStats)
+admin.site.register(Chat)
 # Register your models here.

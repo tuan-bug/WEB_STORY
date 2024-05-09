@@ -9,14 +9,14 @@
                     <div class="product__details__pic">
                         <div class="product__details__pic__item">
                             <img style="width: 100%" class="product__details__pic__item--large"
-                                src="{{story.ImageURL}}" alt="">
+                                 src="{{ story.ImageURL }}" alt="">
                         </div>
 
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-8">
                     <div class="product__details__text">
-                        <h3>{{story.name}}</h3>
+                        <h3>{{ story.name }}</h3>
                         <div class="product__details__rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
@@ -25,20 +25,20 @@
                             <i class="fa fa-star-half-o"></i>
                             <span>(18 đánh giá)</span>
                         </div>
-                    <div class="d-flex">
-                        <div class="product__details__rating p-3">
-                            <i class="fa fa-star"></i>
-                            {{ story.view}} view
+                        <div class="d-flex">
+                            <div class="product__details__rating p-3">
+                                <i class="fa fa-star"></i>
+                                {{ story.view }} view
+                            </div>
+                            <div class="product__details__rating p-3">
+                                <i class="fa fa-star"></i>
+                                {{ story.likes }} like
+                            </div>
+                            <div class="product__details__rating p-3">
+                                <i class="fa fa-star"></i>
+                                {{ story.count_comment }} comment
+                            </div>
                         </div>
-                        <div class="product__details__rating p-3">
-                            <i class="fa fa-star"></i>
-                            {{ story.likes }} like
-                        </div>
-                        <div class="product__details__rating p-3">
-                            <i class="fa fa-star"></i>
-                            {{ story.count_comment }} comment
-                        </div>
-                    </div>
 
                         <div class="product__details__text mb-2">Trạng thái:
                             {% if products.count > 0 %}
@@ -47,63 +47,166 @@
                                 Hết hàng
                             {% endif %}
                         </div>
-                        <div class="product__details__text mb-2"> <b>Tác giả:</b> {{ story.author }}</div>
-                        <div class="product__details__text mb-2"> <b>Tình trạng: </b> {{ story.status }} </div>
-                        <div class="product__details__text mb-2"> 
+                        <div class="product__details__text mb-2"><b>Tác giả:</b> {{ story.author }}</div>
+                        <div class="product__details__text mb-2"><b>Tình trạng: </b> {{ story.status }} </div>
+                        <div class="product__details__text mb-2">
                             <b> Thể loại: </b>
                             {% for genre in genres %}
-                            	{{ genre.name }}
+                                {{ genre.name }}
                             {% endfor %}
-                            
+
                         </div>
-                        <div class="product__details__text mb-2"> <b> Xếp hạng: </b> xxx </div>
-                    <div class="product__details__text mb-2 text-justify"> <b>Mô tả: </b>{{ story.description }} </div>
+                        <div class="product__details__text mb-2"><b> Xếp hạng: </b> xxx</div>
+                        <div class="product__details__text mb-2 text-justify"><b>Mô tả: </b>{{ story.description }}
+                        </div>
 
                     </div>
                 </div>
-            
                 <div class="col-lg-12">
                     <div class="product__details__text">
                         <div class="text-right mb-3">
-                            <button class="btn btn-primary btn-icon-split p-2" data-bs-toggle="modal" data-bs-target="#addChapModal" >
+                            <button class="btn btn-primary btn-icon-split p-2" data-bs-toggle="modal"
+                                    data-bs-target="#addChapModal">
                                 Thêm chap mới
                             </button>
                         </div>
                     </div>
                 </div>
-            {% include 'admin/story/addChapter.html' %}
-                    
+                {% include 'admin/story/addChapter.html' %}
                 <div class="container mt-5 d-flex justify-content-center">
-                    
-                    
                     <table style="max-width: 800px" class="table ">
                         <thead>
-                            <tr>
-                                <th>Chap</th>
-                                <th>Số lượt xem</th>
-                                <th>Ngày</th>
-                            </tr>
+                        <tr>
+                            <th>Chap</th>
+                            <th>Số lượt xem</th>
+                            <th>Ngày</th>
+                            <th>Thao tác</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {% for chapter in chapters %}
-                                <tr>
-                                    {% comment %} <td>
+                        {% for chapter in chapters %}
+                            <tr>
+                                {% comment %} <td>
                                         <img style="max-width: 100px" src="{{ chapter.ImageURL }}" alt="">
-                                        
                                     </td> {% endcomment %}
-                                    <td>{{ chapter.name }}</td>
-                                    <td>{{ chapter.view }}</td>
-                                    <td>{{ chapter.date }}</td>
-                                </tr>
-                            {% endfor %}
+                                <td>{{ chapter.name }}</td>
+                                <td>{{ chapter.view }}</td>
+                                <td>{{ chapter.date }}</td>
+                                <td>
+                                    <button class="mr-2 btn btn-warning btn-circle" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModalEditChap-{{ chapter.id }}">
+                                        <i class="fa fa-pencil" style="font-size: 20px"></i>
+                                    </button>
+                                    <div class="modal fade" id="exampleModalEditChap-{{ chapter.id }}" tabindex="-1"
+                                         aria-labelledby="exampleModalLabelEditChap" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Sửa Chap</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <form id="editChapterForm-{{ chap.id }}" method="POST"
+                                                      action="{% url 'editChapter' %}?id={{ chap.id }}">
+                                                    <div class="modal-body">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="id" value="{{ chap.id }}">
+                                                        <div class="form-group">
+                                                            <label for="editCategoryName">Tên Chap</label>
+                                                            <input type="text" class="form-control"
+                                                                   id="editChapName-{{ chap.id }}" name="name"
+                                                                   value="{{ chapter.name }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-warning"
+                                                                data-bs-dismiss="modal">Quay lại
+                                                        </button>
+                                                        <button type="submit" form="editChapForm-{{ chap.id }}"
+                                                                class="btn btn-primary">Lưu Thay Đổi
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button class="mr-2 btn btn-warning btn-circle" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModalDeleteChap-{{ chapter.id }}">
+                                        <i class="fa fa-trash-o" style="font-size: 20px "></i>
+                                    </button>
+
+                                    <div class="modal fade" id="exampleModalDeleteChap-{{ chapter.id }}" tabindex="-1"
+                                         aria-labelledby="exampleModalLabelDeleteChap" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Xóa Chap</h5>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Bạn có chắc chắn muốn xóa chap truyện <span
+                                                            id="product-name"></span> này không?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-warning" data-dismiss="modal">
+                                                        Quay lại
+                                                    </button>
+                                                    <a href="{% url 'deleteChap' chapter.id %}" type="button"
+                                                       class="delete-product btn btn-danger">Xác nhận</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </section>
+    <script>
+        $(document).ready(function () {
+            $('form[id^="editChapterForm"]').submit(function (e) {
+                console.log("Hi")
+                e.preventDefault(); // Ngăn chặn hành động mặc định của biểu mẫu
 
-    <style>
-    
-    </style>
+                // Lấy ID của biểu mẫu và tạo URL
+                var formId = $(this).attr('id');
+                var chapterId = formId.split('-')[1]; // ID của chương
+                var url = $(this).attr('action');
+
+                // Gửi yêu cầu AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            $('#exampleModalEditChap-' + chapterId).modal('hide');
+                            // Thực hiện các hành động khác khi sửa chương thành công, ví dụ như làm mới trang
+                            window.location.reload();
+                        } else {
+                            // Xử lý khi có lỗi xảy ra trong quá trình sửa chương
+                            console.error("Có lỗi xảy ra khi sửa chương");
+                            // Ví dụ: Hiển thị thông báo lỗi
+                            alert('Đã xảy ra lỗi: ' + response.error);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Xử lý khi có lỗi xảy ra trong quá trình gửi yêu cầu Ajax
+                        console.error("Có lỗi xảy ra khi gửi yêu cầu Ajax: " + error);
+                    }
+                });
+
+                return false; // Ngăn chặn việc gửi form một cách thông thường
+            });
+        });
+
+    </script>
+
 {% endblock blog-slide %}

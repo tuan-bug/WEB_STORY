@@ -2,12 +2,13 @@ import calendar
 import datetime
 from datetime import timedelta
 
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 
 from app.models import *
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models import Sum, DateTimeField, IntegerField
-from django.contrib.admin.models import LogEntry
+from django.db.models import Sum, DateTimeField, IntegerField, Count
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 
 
 def is_admin(user):
@@ -76,6 +77,39 @@ def homeManage(request):
 
     next_month = current_time.month + 1 if current_time.month < 12 else 1
     next_year = current_time.year if current_time.month < 12 else current_time.year + 1
+
+    today = timezone.now().date()
+    top_stories = Story.objects.filter(chapters__date__gte=today).annotate(
+        total_views=Count('chapters__view')).order_by('-total_views')[:3]
+    for story in top_stories:
+        print(story.name, "- hi -", story.total_views)
+
+    # Tính số lượt đọc của từng truyện
+    story_views = ViewHistory.objects.values('story_id').annotate(num_views=Count('story_id'))
+
+    # Tính số lượt theo dõi của từng truyện
+    story_follows = Follow.objects.values('story_id').annotate(num_follows=Count('story_id'))
+
+    # Kết hợp thông tin số lượt đọc và số lượt theo dõi của mỗi truyện
+    trending_stories = {}
+    for view in story_views:
+        story_id = view['story_id']
+        num_views = view['num_views']
+        num_follows = Follow.objects.filter(story_id=story_id).count()
+        trending_stories[story_id] = num_views + num_follows
+
+    # Sắp xếp các truyện theo thứ tự giảm dần của số lượt đọc và số lượt theo dõi kết hợp
+    trending_stories = dict(sorted(trending_stories.items(), key=lambda item: item[1], reverse=True))
+
+    # Lấy ra các truyện xu hướng (ví dụ: 10 truyện đầu tiên)
+    trending_stories = list(trending_stories.keys())[:10]
+    # trending_stories là danh sách các ID của các truyện xu hướng
+    trending_stories_info = []
+    for story_id in trending_stories:
+        story = Story.objects.get(id=story_id)
+        trending_stories_info.append(story)
+        print(story.name)
+
     context = {
         'total_views': total_views,
         'total_likes': total_likes,
@@ -94,22 +128,38 @@ def homeManage(request):
         'month': current_time.month,
         'calendar': calendar_data,
         'current_day': current_time.day,
+        'trending_stories': trending_stories_info
     }
     return render(request, 'admin/home_manage.html', context)
 
 
 def manageHistory(request):
     logs = LogEntry.objects.all()
-    print(logs)
-    for log in logs:
-        print(f"Người dùng: {log.user}")
-        print(f"Thời gian: {log.action_time}")
-        # print(f"Hoạt động: {log.get_action_display()}")
-        print(f"Đối tượng: {log.object_repr}")
-        print(f"Đối tượng ID: {log.object_id}")
-        print(f"Thay đổi: {log.change_message}")
-        print("----------")
+    paginator = Paginator(logs, 15)  # Số lượng mục trên mỗi trang (đây là 10, bạn có thể điều chỉnh)
+
+    page_number = request.GET.get('page')
+    try:
+        page_logs = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_logs = paginator.page(1)
+    except EmptyPage:
+        page_logs = paginator.page(paginator.num_pages)
+
+    for log in page_logs:
+        if log.action_flag == ADDITION:
+            log.change_message = "Thêm mới"
+        elif log.action_flag == CHANGE:
+            change_message = log.get_change_message()
+            words = change_message.split()
+            if words:
+                words.pop(0)
+                new_paragraph = ' '.join(words)
+            print(new_paragraph)
+            log.change_message = "Chỉnh sửa " + new_paragraph
+        elif log.action_flag == DELETION:
+            log.change_message = "Xóa"
+
     context = {
-        'logs': logs,
+        'logs': page_logs,
     }
     return render(request, 'admin/history/history.html', context)

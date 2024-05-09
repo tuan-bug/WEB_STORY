@@ -1,4 +1,5 @@
 from django.contrib.auth.models import *
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
@@ -9,13 +10,18 @@ from app.python.admin.manage import is_admin
 @user_passes_test(is_admin)
 def manageUser(request):
     users = User.objects.all()  # lay cac damh muc lon
+    paginator = Paginator(users, 10)
+    # Lấy số trang từ tham số truy vấn (nếu có)
+    page_number = request.GET.get('page')
+    # Lấy các mục cho trang hiện tại
+    page_obj = paginator.get_page(page_number)
     feedback = Contact.objects.all().count()
     contacts = Contact.objects.all()
     # us = users.staff_status
     form = CreateUserForm()
     print('hahaha: ')
 
-    context = {'users': users,
+    context = {'users': page_obj,
                'feedback': feedback,
                'contacts': contacts,
                'form': form,

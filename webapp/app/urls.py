@@ -40,28 +40,30 @@ urlpatterns = [
     path('edit_information/', views.edit_information, name="edit_information"),
     path('contact/', views.contact, name="contact"),
 
-
-
+    path('chat/', views.chat, name="chat"),
+    path('send-message/', views.send_message, name='send_message'),
     # ADMIN
     path('manage/', views.Manage, name="manage"),
     path('home_manage/', views.homeManage, name="home_manage"),
     #path('home_manage/<int:year>/<int:month>/', views.homeManage, name='home_manage'),
 
-
-
     # STORY
     path('manageStory/', views.manageStory, name="manageStory"),
     path('addStory/', views.addStory, name="addStory"),
-    path('addChapter/', views.addChapter, name="addChapter"),
     path('editStory/', views.editStory, name="editStory"),
     path('deleteStory/<int:id>', views.deleteStory, name="deleteStory"),
     path('viewStory/', views.viewStory, name="viewStory"),
+    path('searchStory/', views.searchStory, name="searchStory"),
 
+    path('addChapter/', views.addChapter, name="addChapter"),
+    path('editChapter/', views.editChapter, name="editChapter"),
+    path('deleteChap/<int:id>', views.deleteChap, name="deleteChap"),
     # CATEGORY
     path('manageCategory/', views.manageCategory, name="manageCategory"),
     path('addCategory/', views.addCategory, name="addCategory"),
     path('editCategory/', views.editCategory, name="editCategory"),
     path('deleteCategory/<int:id>', views.deleteCategory, name="deleteCategory"),
+    path('searchCategory/', views.searchCategory, name="searchCategory"),
 
     # USERS
     path('manageUser/', views.manageUser, name="manageUser"),
