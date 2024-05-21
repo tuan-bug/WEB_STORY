@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 def detail(request):
     user_not_login = "none" if request.user.is_authenticated else "show"
     user_login = "show" if request.user.is_authenticated else "none"
+    profile = None
     if request.user.is_authenticated:
         profiles = Customer.objects.filter(user=request.user).order_by('-created_at')
         if profiles:
@@ -68,6 +69,7 @@ def detail(request):
         'categories': categories,
         'lstStory': lstStory,
         'profile': profile,
+        'is_logged_in': request.user.is_authenticated,
     }
     return render(request, 'app/detail.html', context)
 
@@ -77,6 +79,7 @@ def detail_chapter(request, chapter_slug):
     global chapter
     user_not_login = "none" if request.user.is_authenticated else "show"
     user_login = "show" if request.user.is_authenticated else "none"
+    profile = None
     if request.user.is_authenticated:
         profiles = Customer.objects.filter(user=request.user).order_by('-created_at')
         if profiles:
@@ -98,7 +101,7 @@ def detail_chapter(request, chapter_slug):
     next_chapter = chapters.filter(id__gt=chapter.id).first()
 
     print(chapter.name)
-
+    listComment = Comment.objects.filter(story=story)
     images = ImagesChapter.objects.filter(chap=chapter)
     print(chapter)
     context = {
@@ -111,5 +114,6 @@ def detail_chapter(request, chapter_slug):
         'prev_chapter': prev_chapter,
         'next_chapter': next_chapter,
         'profile': profile,
+        'listComment': listComment,
     }
     return render(request, 'app/detail_chapter.html', context)

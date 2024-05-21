@@ -7,6 +7,7 @@ from django.db.models import Q
 def category(request):
     user_not_login = "none" if request.user.is_authenticated else "show"
     user_login = "show" if request.user.is_authenticated else "none"
+    profile = None
     if request.user.is_authenticated:
         profiles = Customer.objects.filter(user=request.user).order_by('-created_at')
         if profiles:
@@ -39,7 +40,7 @@ def category(request):
           'user_not_login': user_not_login,
           'categories': categories,
           'stories': stories,
-        'profile': profile,
+          'profile': profile,
     }
     return render(request, "app/category.html", context)
 
@@ -47,6 +48,7 @@ def category(request):
 def stories_by_category(request, category_id):
     user_not_login = "none" if request.user.is_authenticated else "show"
     user_login = "show" if request.user.is_authenticated else "none"
+    profile = None
     if request.user.is_authenticated:
         profiles = Customer.objects.filter(user=request.user).order_by('-created_at')
         if profiles:
@@ -81,3 +83,11 @@ def stories_by_category(request, category_id):
         'profile': profile,
     }
     return render(request, 'app/category.html', context)
+
+
+set1 = {1, 2, 3}
+set2 = {3, 4, 5}
+union_set = set1 | set2  # Hợp của set1 và set2
+intersection_set = set1 & set2  # Giao của set1 và set2
+
+

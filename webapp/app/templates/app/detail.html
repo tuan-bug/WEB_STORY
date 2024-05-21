@@ -165,7 +165,7 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="fs-5">Popover in a modal</h5>
+                                                        <h5 class="fs-5">Thông báo</h5>
                                                         <button type="button" class="close" data-bs-dismiss="modal"
                                                                 aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
@@ -200,48 +200,19 @@
 
                 <div class="col-lg-3">
                     <h4>Truyện đề xuất</h4>
-                        <div class="latest-prdouct__slider__item mt-2">
-                            {% for story in lstStory %}
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="{{ story.ImageURL }}" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>{{ story.name }}</h6>
+                    <div class="latest-prdouct__slider__item mt-2">
+                        {% for story in lstStory %}
+                            <a href="#" class="latest-product__item">
+                                <div class="latest-product__item__pic">
+                                    <img src="{{ story.ImageURL }}" alt="">
+                                </div>
+                                <div class="latest-product__item__text">
+                                    <h6>{{ story.name }}</h6>
 
-                                    </div>
-                                </a>
-                            {% endfor %}
-                        </div>
-
-{#                    <div class="latest-prdouct__slider__item">#}
-{#                        <a href="#" class="latest-product__item">#}
-{#                            <div class="latest-product__item__pic">#}
-{#                                <img src="" alt="">#}
-{#                            </div>#}
-{#                            <div class="latest-product__item__text">#}
-{#                                <h6>Crab Pool Security</h6>#}
-{##}
-{#                            </div>#}
-{#                        </a>#}
-{#                        <a href="#" class="latest-product__item">#}
-{#                            <div class="latest-product__item__pic">#}
-{#                                <img src="img/latest-product/lp-2.jpg" alt="">#}
-{#                            </div>#}
-{#                            <div class="latest-product__item__text">#}
-{#                                <h6>Crab Pool Security</h6>#}
-{##}
-{#                            </div>#}
-{#                        </a>#}
-{#                        <a href="#" class="latest-product__item">#}
-{#                            <div class="latest-product__item__pic">#}
-{#                                <img src="img/latest-product/lp-3.jpg" alt="">#}
-{#                            </div>#}
-{#                            <div class="latest-product__item__text">#}
-{#                                <h6>Crab Pool Security</h6>#}
-{#                            </div>#}
-{#                        </a>#}
-{#                    </div>#}
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
                 </div>
                 <div class="col-lg-12">
                     <div class="product__details__tab">
@@ -305,23 +276,28 @@
                                                     {% csrf_token %}
                                                     {{ formComment.title }}
                                                     <div class="float-end mt-2 pt-1">
-                                                        <button name="comment" type="submit"
-                                                                class="btn primary-btn btn-sm">Bình luận
-                                                        </button>
+                                                        {% if is_logged_in %}
+                                                            <button name="comment" type="submit"
+                                                                    class="btn primary-btn btn-sm">Bình luận
+                                                            </button>
+                                                        {% else %}
+                                                            <button name="comment" type="submit"
+                                                                    class="btn primary-btn btn-sm" disabled>Bình luận
+                                                            </button>
+                                                        {% endif %}
+
                                                     </div>
                                                 </form>
                                                 <h4 class="pt-3 pb-2">Bình luận</h4>
                                                 {% for comment in listComment %}
                                                     <div class="d-flex flex-start mb-4">
                                                         <img class="rounded-circle shadow-1-strong me-3"
-                                                             src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp"
+                                                             src="{{ comment.user.ImageURL }}"
                                                              alt="avatar" width="55"
                                                              height="55"/>
                                                         <div class="ml-3">
-                                                            <span> <span
-                                                                    style="font-weight: bold; margin-right: 10px;">{{ comment.user.first_name }} {{ comment.user.last_name }}</span>{{ comment.date|date:"d/m/Y" }} </span>
-
-
+                                                            <span>
+                                                                <span style="font-weight: bold; margin-right: 10px;">{{ comment.user.first_name }} {{ comment.user.last_name }}</span>{{ comment.date|date:"d/m/Y" }} </span>
                                                             <p class="mb-0">{{ comment.title }}</p>
                                                         </div>
                                                     </div>

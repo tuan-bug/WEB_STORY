@@ -6,6 +6,7 @@ from app.models import *
 def searchProduct(request):
     user_not_login = "none" if request.user.is_authenticated else "show"
     user_login = "show" if request.user.is_authenticated else "none"
+    profile = None
     if request.user.is_authenticated:
         profiles = Customer.objects.filter(user=request.user).order_by('-created_at')
         if profiles:
