@@ -1,0 +1,98 @@
+{% extends 'admin/manage.html' %}
+{% load static %}
+{% block blog-category %}
+    {% include 'admin/layout/message.html' %}
+    <div class="mt-4">
+        {% include 'admin/category/addCategory.html' %}
+        <div class="card shadow mb-4 ml-2">
+            <div class="card-body pr-4 pl-4">
+                <div style="border-bottom: 1px solid #e3e6f0" class="row">
+                    <div style="border-bottom: 1px solid #e3e6f0" class="col-12">
+                        <h3>DANH SÁCH LỊCH SỬ</h3>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Tên truyện</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1"
+                                   placeholder="Nhập tên đối tượng">
+                        </div>
+                    </div>
+                    <div class="col-6">
+
+                    </div>
+                    <div class="col-3 d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive mt-4">
+                    <table style="border: 1px solid #e3e6f0" class="table text-center" id="dataTable" width="100%"
+                           cellspacing="0">
+                        <thead>
+                        <tr style="padding-bottom: 25px;">
+                            <th style="border: 1px solid #e3e6f0">STT</th>
+                            <th style="border: 1px solid #e3e6f0">Người bình luận</th>
+                            <th style="border: 1px solid #e3e6f0"> Truyện</th>
+                            <th style="border: 1px solid #e3e6f0"> Nội dung</th>
+                            <th style="border: 1px solid #e3e6f0">Thời gian</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for comment in comments %}
+                            <tr>
+                                <td style="border: 1px solid #e3e6f0">{{ forloop.counter }}</td>
+                                <td>{{ comment.user.username }}</td>
+                                <td style="border: 1px solid #e3e6f0">{{ comment.story.name }}</td>
+                                <td style="border: 1px solid #e3e6f0">{{ comment.title }}</td>
+                                <td style="border: 1px solid #e3e6f0">{{ comment.date | date:"d/m/Y H:i:s" }} </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination justify-content-center mt-4">
+                    <ul class="pagination">
+                        {% if comments.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1">
+                                    <i class="fas fa-angle-double-left"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ comments.previous_page_number }}">
+                                    <i class="fas fa-angle-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item disabled">
+                    <span class="page-link">
+                        Trang {{ comments.number }} / {{ comments.paginator.num_pages }}
+                    </span>
+                        </li>
+
+                        {% if comments.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ comments.next_page_number }}">
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ comments.paginator.num_pages }}">
+                                    <i class="fas fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- Modal Edit Category -->
+    {% include 'admin/category/editCategory.html' %}
+    <!-- Modal Delete Category -->
+    {% include 'admin/category/deleteCategory.html' %}
+
+
+{% endblock blog-category %}

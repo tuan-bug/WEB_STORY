@@ -1,5 +1,6 @@
-# from itertools import product
+
 from django.contrib import messages
+from django.core.paginator import PageNotAnInteger, EmptyPage
 from django.db.models import Sum
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
@@ -14,9 +15,10 @@ from .python.app.detail import detail, detail_chapter
 from .python.app.information import Information, edit_information
 from .python.app.login import loginPage, logoutPage
 from .python.app.register import register
-from .python.app.search import searchProduct
+from .python.app.search import searchStory
 from .python.app.updateItem import updateItem
-from .python.app.contact import contact
+from .python.app.ratting import *
+from .python.app.contact import *
 
 
 # admin
@@ -161,97 +163,6 @@ def story_follow(request):
     return render(request, 'app/follow.html', context)
 
 
-def ratting(request):
-    user_not_login = "none" if request.user.is_authenticated else "show"
-    user_login = "show" if request.user.is_authenticated else "none"
-    stories = Story.objects.all()
-
-    context = {
-        'user_not_login': user_not_login,
-        'user_login': user_login,
-        'stories': stories
-    }
-    return render(request, 'app/ratting.html', context)
-
-
-def ratting_date(request):
-    # Kiểm tra người dùng đăng nhập
-    user_not_login = "none" if request.user.is_authenticated else "show"
-    user_login = "show" if request.user.is_authenticated else "none"
-    current_date = date.today()
-
-    # Lấy ngày hiện tại
-    current_date = date.today()
-
-    # Tính ngày 7 ngày trước
-    date_7_days_ago = current_date - timedelta(days=100)
-
-    # Lấy danh sách các chapter có lượt xem nhiều trong 7 ngày qua
-    popular_stories = Story.objects.filter(chapters__date__range=[date_7_days_ago, current_date]) \
-                           .annotate(total_views=Sum('chapters__view')) \
-                           .order_by('-total_views')[:10]
-
-    print(popular_stories)
-    for story in popular_stories:
-        print(story.total_views)
-    context = {
-        'user_not_login': user_not_login,
-        'user_login': user_login,
-        'stories': popular_stories
-    }
-    return render(request, 'app/ratting.html', context)
-
-
-def ratting_month(request):
-    # Kiểm tra người dùng đăng nhập
-    user_not_login = "none" if request.user.is_authenticated else "show"
-    user_login = "show" if request.user.is_authenticated else "none"
-    current_date = date.today()
-
-    # Lấy ngày hiện tại
-    current_date = date.today()
-
-    # Tính ngày 7 ngày trước
-    date_7_days_ago = current_date - timedelta(days=100)
-
-    # Lấy danh sách các chapter có lượt xem nhiều trong 7 ngày qua
-    popular_chapters = Chapter.objects.filter(date__range=[date_7_days_ago, current_date]) \
-                           .annotate(total_views=Sum('view')) \
-                           .order_by('-total_views')[:20]
-
-    print(popular_chapters)
-    context = {
-        'user_not_login': user_not_login,
-        'user_login': user_login,
-        'stories': popular_chapters
-    }
-    return render(request, 'app/ratting.html', context)
-
-def ratting_year(request):
-    # Kiểm tra người dùng đăng nhập
-    user_not_login = "none" if request.user.is_authenticated else "show"
-    user_login = "show" if request.user.is_authenticated else "none"
-    current_date = date.today()
-
-    # Lấy ngày hiện tại
-    current_date = date.today()
-
-    # Tính ngày 7 ngày trước
-    date_7_days_ago = current_date - timedelta(days=100)
-
-    # Lấy danh sách các chapter có lượt xem nhiều trong 7 ngày qua
-    popular_chapters = Chapter.objects.filter(date__range=[date_7_days_ago, current_date]) \
-                           .annotate(total_views=Sum('view')) \
-                           .order_by('-total_views')[:20]
-
-    print(popular_chapters)
-    context = {
-        'user_not_login': user_not_login,
-        'user_login': user_login,
-        'stories': popular_chapters
-    }
-    return render(request, 'app/ratting.html', context)
-
 
 def chat(request):
     messages = Chat.objects.all()
@@ -324,3 +235,25 @@ def deleteChap(request, id):
                'messages': messages,
             }
     return render(request, 'admin/story/view_story.html', context)
+
+
+def Notification(request):
+    comments_list = Comment.objects.all()
+
+    # Số lượng comments trên mỗi trang
+    paginator = Paginator(comments_list, 10)  # 10 comments mỗi trang
+
+    page = request.GET.get('page')
+
+    try:
+        comments = paginator.page(page)
+    except PageNotAnInteger:
+        # Nếu page không phải là số nguyên, trả về trang đầu tiên
+        comments = paginator.page(1)
+    except EmptyPage:
+        # Nếu page nằm ngoài phạm vi, trả về trang cuối cùng
+        comments = paginator.page(paginator.num_pages)
+    context = {
+        'comments': comments,
+    }
+    return render(request, 'admin/notification/notification.html', context)

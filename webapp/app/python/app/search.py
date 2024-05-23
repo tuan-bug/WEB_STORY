@@ -3,7 +3,7 @@ from django.db.models import Q
 from app.models import *
 
 
-def searchProduct(request):
+def searchStory(request):
     user_not_login = "none" if request.user.is_authenticated else "show"
     user_login = "show" if request.user.is_authenticated else "none"
     profile = None

@@ -34,6 +34,7 @@ def homeManage(request):
     total_likes = Story.objects.aggregate(total_likes=Sum('likes'))['total_likes'] or 0
     print("Tổng số lượt xem của tất cả các câu chuyện là:", total_likes)
 
+    users = User.objects.all().count()
     story_view = Story.objects.all().order_by('-view')[:5]
 
     current_time = timezone.now()
@@ -128,7 +129,8 @@ def homeManage(request):
         'month': current_time.month,
         'calendar': calendar_data,
         'current_day': current_time.day,
-        'trending_stories': trending_stories_info
+        'trending_stories': trending_stories_info,
+        'users': users,
     }
     return render(request, 'admin/home_manage.html', context)
 

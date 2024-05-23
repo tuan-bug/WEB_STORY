@@ -1,9 +1,15 @@
 from django.shortcuts import get_object_or_404, render, redirect
 
 from app.models import *
+import numpy as np
+import pandas as pd
+from sklearn.cluster import KMeans
+from django.shortcuts import render
 
 
 from django.shortcuts import redirect
+
+
 
 def detail(request):
     user_not_login = "none" if request.user.is_authenticated else "show"
@@ -20,6 +26,8 @@ def detail(request):
 
     slug = request.GET.get('slug', '') # lấy slug khi người dùng vlick vào truyện nào đó
     story = Story.objects.get(slug=slug)
+    story.view = story.view + 1
+    story.save()
     categories_story = story.category.values_list('slug', flat=True)
     categories = story.category.all()
     print(story)
@@ -54,7 +62,7 @@ def detail(request):
     story.count_comment = listComment.count()
     story.save()
     print(listComment)
-
+    recommendations = recommend_stories()
     context = {
         'user_not_login': user_not_login,
         'user_login': user_login,
@@ -70,6 +78,7 @@ def detail(request):
         'lstStory': lstStory,
         'profile': profile,
         'is_logged_in': request.user.is_authenticated,
+        'recommendations': recommendations,
     }
     return render(request, 'app/detail.html', context)
 
@@ -117,3 +126,39 @@ def detail_chapter(request, chapter_slug):
         'listComment': listComment,
     }
     return render(request, 'app/detail_chapter.html', context)
+
+
+
+def get_story_data():
+    stories = Story.objects.all()
+    data = []
+    for story in stories:
+        data.append([story.id, story.view, story.count_comment, story.likes])
+    return pd.DataFrame(data, columns=['id', 'views', 'comments', 'likes'])
+
+def train_kmeans():
+    df = get_story_data()
+    kmeans = KMeans(n_clusters=8)  # Chọn số lượng cụm phù hợp
+    df['cluster'] = kmeans.fit_predict(df[['views', 'comments', 'likes']])
+    return kmeans, df
+
+kmeans_model, clustered_data = train_kmeans()
+
+def recommend_stories(num_recommendations=5):
+    # Lấy dữ liệu truyện và cluster đã được gán nhãn
+    global clustered_data
+
+    # Chọn một cụm ngẫu nhiên
+    random_cluster = np.random.choice(clustered_data['cluster'].unique())
+
+    # Lấy các truyện thuộc cụm này
+    similar_stories = clustered_data[clustered_data['cluster'] == random_cluster]
+
+    # Sắp xếp các truyện trong cụm theo số lượt xem, bình luận, yêu thích và chọn top N truyện
+    similar_stories = similar_stories.sort_values(by=['views', 'comments', 'likes'], ascending=False)
+    recommended_stories_ids = similar_stories['id'].head(num_recommendations).tolist()
+
+    # Lấy các đối tượng truyện từ ID
+    recommended_stories = Story.objects.filter(id__in=recommended_stories_ids)
+
+    return recommended_stories

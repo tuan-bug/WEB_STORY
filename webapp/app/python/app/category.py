@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 import re
 from app.models import *
@@ -16,24 +17,35 @@ def category(request):
         else:
             profile = None
     categories = Genre.objects.all()
-    stories = Story.objects.all()
-    for story in stories:
+    stories_list = Story.objects.all()
+
+    for story in stories_list:
         latest_chapter = story.chapters.order_by('-name').first()
         if latest_chapter:
-            # Lấy số từ tên chương mới nhất
             match = re.search(r'\d+', latest_chapter.name)
             if match:
-                chapter_number = match.group()  # Lấy số từ kết quả phù hợp
+                chapter_number = match.group()
                 story.chapter_number = chapter_number
-                story.latest_chapter_date = latest_chapter.date  # Lấy ngày của chương mới nhất
+                story.latest_chapter_date = latest_chapter.date
                 story.chapter_id = latest_chapter.id
-                print("Chapter number:", story.chapter_number )
-                print("Chapter id: ", story.chapter_id)
+                print("Chapter number:", story.chapter_number)
+                print("Chapter id:", story.chapter_id)
                 print("Latest chapter date:", latest_chapter.date)
             else:
                 print("No number found in chapter name")
         else:
             print("No chapters found for story:", story.name)
+
+    # Sử dụng Paginator cho danh sách stories
+    paginator = Paginator(stories_list, 12)  # 10 stories mỗi trang
+    page = request.GET.get('page')
+
+    try:
+        stories = paginator.page(page)
+    except PageNotAnInteger:
+        stories = paginator.page(1)
+    except EmptyPage:
+        stories = paginator.page(paginator.num_pages)
 
     context ={
           'user_login': user_login,

@@ -6,7 +6,7 @@ from django import forms
 from django.utils import timezone
 from rest_framework import serializers
 from ckeditor.fields import RichTextField
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 from django.utils.text import slugify
@@ -220,31 +220,6 @@ class FormContact(forms.ModelForm):
         }
 
 class CreateUserForm(UserCreationForm):
-    # def clean_username(self):
-    #     username = self.cleaned_data['username']
-    #     if len(username) < 6:
-    #         raise ValidationError("Tên đăng nhập phải chứa ít nhất 6 ký tự.")
-    #     return username
-
-    # def clean_password1(self):
-    #     password1 = self.cleaned_data.get("password1")
-    #     if len(password1) < 8:
-    #         raise ValidationError("Mật khẩu phải chứa ít nhất 8 ký tự.")
-    #     return password1
-
-    # def clean_password2(self):
-    #     password1 = self.cleaned_data.get("password1")
-    #     password2 = self.cleaned_data.get("password2")
-    #     if password1 and password2 and password1 != password2:
-    #         raise ValidationError("Mật khẩu xác nhận không khớp.")
-    #     return password2
-
-    # def save(self, commit=True):
-    #     user = super().save(commit=False)
-    #     if commit:
-    #         user.save()
-    #     return user
-
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 'password1','password2']
@@ -258,6 +233,18 @@ class CreateUserForm(UserCreationForm):
         }
 
 
+class ChangePasswordForm(forms.Form):
+    old_password = forms.CharField(label="Mật khẩu hiện tại", widget=forms.PasswordInput)
+    new_password1 = forms.CharField(label="Mật khẩu mới", widget=forms.PasswordInput)
+    new_password2 = forms.CharField(label="Xác nhận mật khẩu mới", widget=forms.PasswordInput)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password1 = cleaned_data.get("new_password1")
+        new_password2 = cleaned_data.get("new_password2")
+        if new_password1 and new_password2 and new_password1 != new_password2:
+            raise forms.ValidationError("Mật khẩu mới và xác nhận mật khẩu không khớp.")
+        return cleaned_data
 class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer

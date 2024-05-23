@@ -8,7 +8,7 @@
             <h2 class="section-title"> <b>Truyện đề cử</b> </h2>
             <div class="row mt-2">
                 <div class="categories__slider owl-carousel">
-                    {% for story in storys %}
+                    {% for story in recommended_stories %}
                         <div class="col">
                             <a href="{% url 'detail' %}?slug={{ story.slug }}">
                                 <div class="categories__item set-bg" data-setbg="{{ story.ImageURL }}">
@@ -68,27 +68,27 @@
             </div>
             <nav aria-label="Page navigation ">
                 <ul class="pagination justify-content-center mb-3">
-                    {% if products.has_previous %}
+                    {% if storys.has_previous %}
                         <li class="page-item">
                             <a class="page-link" href="?page=1">&laquo; Đầu</a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ products.previous_page_number }}">Trước</a>
+                            <a class="page-link" href="?page={{ storys.previous_page_number }}">Trước</a>
                         </li>
                     {% endif %}
 
                     <li class="page-item disabled">
                         <span class="page-link">
-                            Trang {{ products.number }}
+                            Trang {{ storys.number }}
                         </span>
                     </li>
 
-                    {% if products.has_next %}
+                    {% if storys.has_next %}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ products.next_page_number }}">Tiếp</a>
+                            <a class="page-link" href="?page={{ storys.next_page_number }}">Tiếp</a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ products.paginator.num_pages }}">Cuối &raquo;</a>
+                            <a class="page-link" href="?page={{ storys.paginator.num_pages }}">Cuối &raquo;</a>
                         </li>
                     {% endif %}
                 </ul>

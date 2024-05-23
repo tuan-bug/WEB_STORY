@@ -11,7 +11,7 @@ urlpatterns = [
     path('login/', views.loginPage, name="login"),
     path('register/', views.register, name="register"),
     path('logout/', views.logoutPage, name="logout"),
-    path('search/', views.searchProduct, name="search"),
+    path('search/', views.searchStory, name="search"),
     #BXH
     path('ratting/', views.ratting, name="ratting"),
     path('ratting_date/', views.ratting_date, name="ratting_date"),
@@ -73,6 +73,7 @@ urlpatterns = [
 
 
     path('history/', views.manageHistory, name="manageHistory"),
+    path('notification/', views.Notification, name="notification"),
 
 
 
